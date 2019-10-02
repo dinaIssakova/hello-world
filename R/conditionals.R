@@ -1,4 +1,4 @@
-#library(msa)
+library(Biostrings)
 library(phangorn)
 
 getBranchLength<- function(tree, spe, nodeNum){
@@ -82,6 +82,10 @@ areCondSatisfied <- function(tree, phydat, spe1, spe2, pos){
   gene1Val <- which(geneSeq1[pos,] == 1)
   gene2Val <- which(geneSeq2[pos,] == 1)
 
+  if (is.na(gene1Val) | is.na(gene2Val)){
+    print(sprintf("No AA at location %d.", pos))
+    return (FALSE)
+  }
   # Position is convergently evolved if:
   #the amino acids at the descendant nodes are identical with each other (x1 = x3)
   cond1 = (gene1Val==gene2Val)
@@ -106,7 +110,7 @@ convertToAA <- function(acctranData){
 
   DNArow = 0
   AArow = 1
-  while (AArow < numrow && DNArow+3 < nrow(acctranData)){
+  while (AArow <= numrow && DNArow+3 <= nrow(acctranData)){
     codon = acctranData[DNArow:(DNArow+3),]
     firstP = mapLetters(as.vector(which(codon[1,]!=0)))
     secondP = mapLetters(as.vector(which(codon[2,]!=0)))
@@ -204,7 +208,29 @@ getConvergent <- function(tree, phyDat, spe, pos){
   return (convSpe)
 }
 
-convSiteData <- function(tree, phydat, spe1, spe2, m){
+getm <- function(tree, phydat, spe1, spe2){
+
+  species <- tree$tip.label
+
+  speNum1 = which(species == spe1)
+  speNum2 = which(species == spe2)
+
+  anc.acctran <- ancestral.pars(tree, phydat, "ACCTRAN")
+
+  geneSeq1 = convertToAA(anc.acctran[[speNum1]])
+  geneSeq2 = convertToAA(anc.acctran[[speNum2]])
+
+  if (nrow(geneSeq1) != nrow(geneSeq2)){
+    print("Unequal gene lengths")
+    stop()
+  } else {
+    return (nrow(geneSeq1))
+  }
+}
+
+convSiteData <- function(tree, phydat, spe1, spe2){
+
+  m <- getm(tree, phydat, spe1, spe2)
 
   numSites = 0
   for (i in 1:m){
