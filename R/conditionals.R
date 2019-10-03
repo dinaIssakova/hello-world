@@ -1,6 +1,12 @@
-library(Biostrings)
-library(phangorn)
-
+#' Find the length of a branch from a given species to a given internal node.
+#'
+#' @param tree A phylogenetic tree
+#' @param spe The name of the species
+#' @param nodeNum The number of the internal node desired.
+#' @return The length of the branch between nodeNum and spe as given by tree.
+#' @examples
+#' getBranchLength(tree, "Mouse", 15)
+#' @export
 getBranchLength<- function(tree, spe, nodeNum){
   leafNum <- which(tree$tip.label == spe)
   rowNum = which(tree$edge[ ,2] == leafNum)
@@ -11,13 +17,23 @@ getBranchLength<- function(tree, spe, nodeNum){
 
   while(!is.na(ancNum) && ancNum != nodeNum){
     leafNum = ancNum
-    rowNum = which(subtree$edge[ ,2] == leafNum)
+    rowNum = which(tree$edge[ ,2] == leafNum)
     ancNum = as.numeric((tree$edge[rowNum, ])[1])
     len = len + tree$edge.length[rowNum]
   }
   return(len)
 }
 
+#' Get the most recent common ancestor between two nodes as given by the given tree.
+#'
+#' @param tree A phylogenetic tree
+#' @param spe The name of species 1 or the number of internal node 1
+#' @param nodeNum The name of species 2 or the number of internal node 2
+#' @param areLeaves Whether or not spe1 and spe2 are species (false indicates both internal nodes).
+#' @return The number of the internal node that is the most recent point of divergence.
+#' @examples
+#' getMostRecentCommonAncestor(tree, "Mouse", "Bovine")
+#' @export
 getMostRecentCommonAncestor<- function(tree, spe1, spe2, areLeaves=TRUE){
 
   if(areLeaves){
@@ -43,6 +59,14 @@ getMostRecentCommonAncestor<- function(tree, spe1, spe2, areLeaves=TRUE){
   }
 }
 
+#' Map DNA bases to a number vector with 1=A, 2=C, 3=G, 4=T.
+#'
+#' @param tree A phylogenetic tree
+#' @param numVec The vector to be mapped.
+#' @return A vector of equivalent length with each value mapped to the appropriate base.
+#' @examples
+#' mapLetters(c(1,2,3,4))
+#' @export
 mapLetters <- function(numVec){
 
   retVec = c()
@@ -76,21 +100,16 @@ areCondSatisfied <- function(tree, phydat, spe1, spe2, pos){
   geneSeq1 = convertToAA(anc.acctran[[speNum1]])
   geneSeq2 = convertToAA(anc.acctran[[speNum2]])
   ancSeq = convertToAA(anc.acctran[[getMostRecentCommonAncestor(tree, spe1, spe2)]])
-
-  # For now : without MSA.
-
   gene1Val <- which(geneSeq1[pos,] == 1)
   gene2Val <- which(geneSeq2[pos,] == 1)
 
-  if (is.na(gene1Val) | is.na(gene2Val)){
+  if (length(gene1Val) == 0 | length(gene2Val) == 0){
     print(sprintf("No AA at location %d.", pos))
     return (FALSE)
   }
-  # Position is convergently evolved if:
-  #the amino acids at the descendant nodes are identical with each other (x1 = x3)
+
   cond1 = (gene1Val==gene2Val)
 
-  # And different from their respective ancestral amino acids
   cond2 = (ancSeq[pos,][gene1Val] == 0)
   cond3 = (ancSeq[pos,][gene2Val] == 0)
 
@@ -139,16 +158,13 @@ probOfChange <- function(pam, AA1, AA2, b){
 
 }
 
-# Future - refine these numbers by considering 'inside' nodes.
 probOfSiteConfig <- function(p=(1/20), tree, spe1, spe2, pos){
 
-  ## Probability that both just mutated to get there.
+
   ancNode = getMostRecentCommonAncestor(tree, spe1, spe2)
 
   b1 = getBranchLength(tree, spe1, ancNode)
   b2 = getBranchLength(tree, spe2, ancNode)
-
-  # TODO: Probably remove out with helper.
 
   species <- tree$tip.label
 
@@ -172,8 +188,11 @@ probOfSiteConfig <- function(p=(1/20), tree, spe1, spe2, pos){
 }
 
 probOfNSitesByChance <- function(p=(1/20), tree, spe1, spe2, m, n){
-  # probability of observing n sites or more convergent-change sites by chance
-  # Future - consider them independently. Currently - assume uniform model (on average)
+
+  if (n == 0){
+    return (0)
+  }
+
   avg=0
   for (j in 1:m){
     avg = avg + probOfSiteConfig(p, tree, spe1, spe2, j)
@@ -228,15 +247,13 @@ getm <- function(tree, phydat, spe1, spe2){
   }
 }
 
-convSiteData <- function(tree, phydat, spe1, spe2){
-
-  m <- getm(tree, phydat, spe1, spe2)
+convSiteData <- function(tree, phydat, spe1, spe2, m=getm(tree, phydat, spe1, spe2)){
 
   numSites = 0
   for (i in 1:m){
     if (areCondSatisfied(tree, phydat, spe1, spe2, i)) {numSites = numSites + 1}
   }
-  print(sprintf("%d potentially convergent sites with a %d probability of this occuring by chance.", numSites, probOfNSitesByChance(tree, spe1, spe2, m, numSites)))
+  print(sprintf("%d potentially convergent sites with a %d % probability of this occuring by chance.", numSites, probOfNSitesByChance(tree, spe1, spe2, m, n=numSites)))
 
   return (numSites)
 
