@@ -39,11 +39,13 @@ This is a basic example which shows you how to solve a common problem:
 ```{r example}
 #library(rgenesconverged)
 # We use the example datasets from phangorn, tree and primates (see ./data).
+load("~/rgenesconverged/data/smallTree.rda")
+load("~/rgenesconverged/data/primates.rda")
 
-summary(tree)
+summary(smallTree)
 summary(primates)
 
-getConvergent(tree, primates, "Mouse", 1)
+#getConvergent(smallTree, primates, "Mouse", 1)
 ```
 
 What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:

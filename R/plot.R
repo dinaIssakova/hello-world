@@ -1,9 +1,16 @@
-### Graphical output.
-library(ggtree)
+#' Plot the convergent network associated with the given gene at the given position on top of the phylogenetic tree.
+#'
+#' @param tree A phylogenetic tree
+#' @param phydat An object of class phydat
+#' @param spe The name of the species to compare to
+#' @param pos The position of interest
+#' @return None
+# @examples
+#' rgenesconvergedPlot(tree, primates, "Mouse", 17)
+#' @export
+rgenesconvergedPlot <- function(tree, phydat, spe, pos) {
 
-rgenesconvergedPlot <- function(tree, phyDat, spe, pos) {
-
-  convNodes <- getConvergent(tree, phyDat, spe, pos)
+  convNodes <- getConvergent(tree, phydat, spe, pos)
   convNodes <- c(convNodes, spe)
 
   groupInfo <- split(tree$tip.label, tree$tip.label%in%convNodes)

@@ -4,16 +4,14 @@
 \alias{getMostRecentCommonAncestor}
 \title{Get the most recent common ancestor between two nodes as given by the given tree.}
 \usage{
-getMostRecentCommonAncestor(tree, spe1, spe2, areLeaves = TRUE)
+getMostRecentCommonAncestor(tree, spe1, spe2)
 }
 \arguments{
 \item{tree}{A phylogenetic tree}
 
-\item{areLeaves}{Whether or not spe1 and spe2 are species (false indicates both internal nodes).}
+\item{spe1}{The name of species 1}
 
-\item{spe}{The name of species 1 or the number of internal node 1}
-
-\item{nodeNum}{The name of species 2 or the number of internal node 2}
+\item{spe2}{The name of species 2}
 }
 \value{
 The number of the internal node that is the most recent point of divergence.

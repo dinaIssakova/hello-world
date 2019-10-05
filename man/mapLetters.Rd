@@ -8,8 +8,6 @@ mapLetters(numVec)
 }
 \arguments{
 \item{numVec}{The vector to be mapped.}
-
-\item{tree}{A phylogenetic tree}
 }
 \value{
 A vector of equivalent length with each value mapped to the appropriate base.

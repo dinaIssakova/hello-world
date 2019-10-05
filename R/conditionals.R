@@ -1,4 +1,5 @@
-#' Find the length of a branch from a given species to a given internal node.
+
+#' Find the (rounded) length of a branch from a given species to a given internal node.
 #'
 #' @param tree A phylogenetic tree
 #' @param spe The name of the species
@@ -9,6 +10,13 @@
 #' @export
 getBranchLength<- function(tree, spe, nodeNum){
   leafNum <- which(tree$tip.label == spe)
+  if (tree$edge.length[1]> 10){
+    tree$edge.length = tree$edge.length/10
+  }
+  if(leafNum == nodeNum){
+    return(0)
+  }
+
   rowNum = which(tree$edge[ ,2] == leafNum)
   ancNum = as.numeric((tree$edge[rowNum, ])[1])
 
@@ -21,47 +29,64 @@ getBranchLength<- function(tree, spe, nodeNum){
     ancNum = as.numeric((tree$edge[rowNum, ])[1])
     len = len + tree$edge.length[rowNum]
   }
-  return(len)
+  return(round(len))
 }
 
 #' Get the most recent common ancestor between two nodes as given by the given tree.
 #'
 #' @param tree A phylogenetic tree
-#' @param spe The name of species 1 or the number of internal node 1
-#' @param nodeNum The name of species 2 or the number of internal node 2
-#' @param areLeaves Whether or not spe1 and spe2 are species (false indicates both internal nodes).
+#' @param spe1 The name of species 1
+#' @param spe2 The name of species 2
 #' @return The number of the internal node that is the most recent point of divergence.
 #' @examples
 #' getMostRecentCommonAncestor(tree, "Mouse", "Bovine")
 #' @export
-getMostRecentCommonAncestor<- function(tree, spe1, spe2, areLeaves=TRUE){
+getMostRecentCommonAncestor<- function(tree, spe1, spe2){
 
-  if(areLeaves){
-    leafNum1 <- which(tree$tip.label == spe1)
-    leafNum2 <- which(tree$tip.label == spe2)
-  } else {
-    leafNum1 <- as.numeric(spe1)
-    leafNum2 <- as.numeric(spe2)
+  if(!is.recursive(tree)){
+    print(tree)
+    stop()
   }
 
-  row1 = tree$edge[which(tree$edge[,2] == leafNum1),]
-  row2 = tree$edge[which(tree$edge[,2] == leafNum2),]
-  anc1 = as.numeric(row1[1])
-  anc2 = as.numeric(row2[1])
+  leafNum1 <- which(tree$tip.label == spe1)
+  leafNum2 <- which(tree$tip.label == spe2)
 
-  if (is.na(anc1) | is.na(anc2)){
+  if (spe1 == spe2){
     return (leafNum1)
-  }else if (anc1==anc2){
-    return(anc1)
   }
-  else {
-    return (max(getMostRecentCommonAncestor(tree, leafNum1, anc2, areLeaves = FALSE), getMostRecentCommonAncestor(tree, leafNum2, anc1, areLeaves = FALSE)))
+
+  visited <- c()
+  row1 = tree$edge[which(tree$edge[,2] == leafNum1),]
+  anc1 = as.numeric(row1[1])
+
+  while (!is.na(anc1)){
+
+    visited <- c(visited, anc1)
+    row1 = tree$edge[which(tree$edge[,2] == anc1),]
+    anc1 = as.numeric(row1[1])
+  }
+
+  row2 = tree$edge[which(tree$edge[,2] == leafNum2),]
+  anc2 = as.numeric(row2[1])
+  nodeNum = leafNum2
+
+  while (!is.na(anc2)){
+    if (anc2%in%visited){
+      return (anc2)
+    }
+    row2 = tree$edge[which(tree$edge[,2] == anc2),]
+    nodeNum = anc2
+    anc2 = as.numeric(row2[1])
+  }
+  if (is.na(anc2)){
+    return (nodeNum)
+  } else {
+    stop("Tree parsed incorrectly. Please check that input is a complete binary tree.")
   }
 }
 
 #' Map DNA bases to a number vector with 1=A, 2=C, 3=G, 4=T.
 #'
-#' @param tree A phylogenetic tree
 #' @param numVec The vector to be mapped.
 #' @return A vector of equivalent length with each value mapped to the appropriate base.
 #' @examples
@@ -88,7 +113,20 @@ mapLetters <- function(numVec){
   return (retVec)
 }
 
-areCondSatisfied <- function(tree, phydat, spe1, spe2, pos){
+#' Determine whether conditions are satisfied for two species to be convergently evolved at a given position.
+#'
+#' @param tree A phylogenetic tree
+#' @param phydat An object of class phydat
+#' @param spe1 The name of species 1
+#' @param spe2 The name of species 2
+#' @param pos The position at which to evaluate if conditions are satisfied
+#' @param anc Optional: the value of the ancestral amino acid at position pos (if not supplied, will be predicted using ancestral reconstruction)
+#' @return TRUE if conditions are satisfied; FALSE if they are not.
+#' @examples
+#' areCondSatisfied(tree, primates, "Mouse", "Bovine", 17)
+#' areCondSatisfied(tree, primates, "Mouse", "Bovine", 1, "L")
+#' @export
+areCondSatisfied <- function(tree, phydat, spe1, spe2, pos, anc){
 
   species <- tree$tip.label
 
@@ -99,7 +137,7 @@ areCondSatisfied <- function(tree, phydat, spe1, spe2, pos){
 
   geneSeq1 = convertToAA(anc.acctran[[speNum1]])
   geneSeq2 = convertToAA(anc.acctran[[speNum2]])
-  ancSeq = convertToAA(anc.acctran[[getMostRecentCommonAncestor(tree, spe1, spe2)]])
+
   gene1Val <- which(geneSeq1[pos,] == 1)
   gene2Val <- which(geneSeq2[pos,] == 1)
 
@@ -107,14 +145,26 @@ areCondSatisfied <- function(tree, phydat, spe1, spe2, pos){
     print(sprintf("No AA at location %d.", pos))
     return (FALSE)
   }
+  if (missing(anc)){
+    ancSeq = convertToAA(anc.acctran[[getMostRecentCommonAncestor(tree, spe1, spe2)]])
+    ancVal = ancSeq[pos,]
+    cond2 = (ancSeq[pos,][gene1Val] == 0)
+    cond3 = (ancSeq[pos,][gene2Val] == 0)
+  } else {
+    ancVal = anc
+    cond2 = (anc != gene1Val)
+    cond3 = (anc != gene2Val)
+  }
 
   cond1 = (gene1Val==gene2Val)
 
-  cond2 = (ancSeq[pos,][gene1Val] == 0)
-  cond3 = (ancSeq[pos,][gene2Val] == 0)
-
   return (cond1 && cond2 && cond3)
 }
+
+#' Convert a binary matrix representing the genomic sequence to one representing the amino acid sequence.
+#'
+#' @param acctranData A matrix of binary data as returned by phangorn function acctran().
+#' @return A matrix of amino acid data.
 
 convertToAA <- function(acctranData){
 
@@ -150,16 +200,61 @@ convertToAA <- function(acctranData){
   return (AAmatrix)
 }
 
-probOfChange <- function(pam, AA1, AA2, b){
+#' Calculate the probability of one amino acid mutating into another over a distance of 1 PAM.
+#'
+#' @param pam The PAM matrix (given in ./data)
+#' @param AA1 The origin amino acid
+#' @param AA2 The target amino acid
+#' @return A probability of mutation.
+#' probOfChange(pam, "L", "K")
+probOfChange1PAM <- function(pam, AA1, AA2){
 
   i <- which(rownames(pam) == AA1)
   j <- which(rownames(pam) == AA2)
-  return (pam[i+1, j+1] * b)
+  return (pam[i, j]/10000)
 
 }
 
-probOfSiteConfig <- function(p=(1/20), tree, spe1, spe2, pos){
+#' Calculate the probability of one amino acid mutating into another over a given branch length.
+#'
+#' @param pam The PAM matrix given in ./data.
+#' @param AA1 The origin amino acid
+#' @param AA2 The target amino acid
+#' @param d The branch length between the two sequences.
+#' @return A scaled probability of mutation.
+# @examples
+#' probOfChange(pam, "L", "K", 3)
+#' @export
+probOfChange <- function(pam, AA1, AA2, d){
+  AAlist <- Biostrings::AA_ALPHABET[-c(21, 22, 23, 24, 25, 26, 27, 28, 29, 30)]
+  if (!(AA1%in%AAlist) | !(AA2%in%AAlist)){
+    return(0)
+  }
 
+  prob = 0
+  if (d == 1){
+    prob = probOfChange1PAM(pam, AA1, AA2)
+    return(prob)
+  }
+  for (aa in AAlist){
+    prob = prob + (probOfChange1PAM(pam, AA1, aa) * probOfChange(pam, aa, AA2, d-1))
+  }
+  return(prob)
+}
+
+#' Calculate the probability that an amino acid site will satisfy the conditions of convergent evolution by chance.
+#'
+#' @param tree A phylogenetic tree
+#' @param phydat An object of class phydat.
+#' @param spe1 The name of species 1
+#' @param spe2 The name of species 2
+#' @param pos The position at which to evaluate if conditions are satisfied
+#' @param p The fraction of the amino acid at the target position in the evaluated genome. (Default is 1/20)
+#' @return Scaled likelihood that the amino acids satisfying the conditions of convergent evolution is by chance.
+# @examples
+#' probOfSiteConfig(tree, primates, "Human", "Chimp", 1)
+#' @export
+probOfSiteConfig <- function(tree, phydat, spe1, spe2, pos, p=(1/20)){
 
   ancNode = getMostRecentCommonAncestor(tree, spe1, spe2)
 
@@ -177,9 +272,9 @@ probOfSiteConfig <- function(p=(1/20), tree, spe1, spe2, pos){
   geneSeq2 = convertToAA(anc.acctran[[speNum2]])
   ancSeq = convertToAA(anc.acctran[[getMostRecentCommonAncestor(tree, spe1, spe2)]])
 
-  gene1Val <- which(geneSeq1[pos,] == 1)
-  gene2Val <- which(geneSeq2[pos,] == 1)
-  ancVal <- which(ancSeq[pos,]==1)
+  gene1Val <- colnames(geneSeq1)[which(geneSeq1[pos,] == 1)]
+  gene2Val <- colnames(geneSeq2)[which(geneSeq2[pos,] == 1)]
+  ancVal <- colnames(ancSeq)[which(ancSeq[pos,]==1)]
 
   prob1 <- probOfChange(pam, gene1Val, ancVal, b1)
   prob2 <- probOfChange(pam, gene2Val, ancVal, b2)
@@ -187,7 +282,19 @@ probOfSiteConfig <- function(p=(1/20), tree, spe1, spe2, pos){
   return (p * prob1 * prob2)
 }
 
-probOfNSitesByChance <- function(p=(1/20), tree, spe1, spe2, m, n){
+#' Calculate the probability that n sites between the two species will satisfy the conditions of convergent evolution by chance.
+#'
+#' @param tree A phylogenetic tree
+#' @param spe1 The name of species 1
+#' @param spe2 The name of species 2
+#' @param m The length of the genes. (Must of equal length)
+#' @param n The number of potential convergent sites
+#' @param p The fraction of the amino acid at the target position in the evaluated genome. (Default is 1/20)
+#' @return Scaled likelihood that the amino acids satisfying the conditions of convergent evolution is by chance.
+# @examples
+#' probOfNSitesByChance(tree, "Human", "Chimp", 20, 2)
+#' @export
+probOfNSitesByChance <- function(tree, spe1, spe2, m, n, p=(1/20)){
 
   if (n == 0){
     return (0)
@@ -195,13 +302,13 @@ probOfNSitesByChance <- function(p=(1/20), tree, spe1, spe2, m, n){
 
   avg=0
   for (j in 1:m){
-    avg = avg + probOfSiteConfig(p, tree, spe1, spe2, j)
+    avg = avg + probOfSiteConfig(tree, primates, spe1, spe2, j)
   }
 
   f = avg/m
 
   prob = 0
-  for (i in 0:n-1){
+  for (i in 1:n-1){
 
     prob = prob + ( factorial(m) / factorial(i)*factorial(m-i) ) * f**i * (1-f)**(m-i)
   }
@@ -209,24 +316,48 @@ probOfNSitesByChance <- function(p=(1/20), tree, spe1, spe2, m, n){
   return (1 - prob)
 }
 
-getConvergent <- function(tree, phyDat, spe, pos){
+#' For a given species, find others in the tree that satisfy the conditions of convergent evolution at a certain position with a less than 0.05 chance of this having occured by chance.
+#'
+#' @param tree A phylogenetic tree
+#' @param phydat An object of class phydat
+#' @param spe The species to compare others in the tree to
+#' @param pos The position at which to compare the genes
+#' @param anc Optional: the value of the ancestral amino acid at position pos (if not supplied, will be predicted using ancestral reconstruction)
+#' @return A vector of species names which satisfy the conditions listed above.
+# @examples
+#' getConvergent(tree, primates, "Human", 1, "L")
+#' @export
+getConvergent <- function(tree, phydat, spe, pos, anc){
   species <- tree$tip.label
-  convSpe <- c()
+  convSpe <- c(spe)
   for (s in species){
-    if (s != spe && areCondSatisfied(tree, phyDat, s, spe, pos)){
-
-      p = probOfSiteConfig(tree, s, spe, pos)
-      print(sprintf("Species %s is potentially convergent with p %d.", spe, p))
+    if (missing(anc)){
+      cond = areCondSatisfied(tree, phydat, s, spe, pos)
+    } else {
+      cond = areCondSatisfied(tree, phydat, s, spe, pos, anc)
     }
 
-    if (p < 0.05){
-      convSpe = c(convSpe, s)
+    if (s != spe && cond){
+
+      p = probOfSiteConfig(tree, primates, s, spe, pos)
+      print(sprintf("Species %s is potentially convergent with p %e.", s, p))
+      if (p < 0.05){
+        convSpe = c(convSpe, s)
+      }
     }
 
   }
   return (convSpe)
 }
 
+#' Get the length of two genes. (Genes must be of equal length.)
+#'
+#' @param tree A phylogenetic tree
+#' @param phydat An object of class phydat
+#' @param spe1 The name of species 1
+#' @param spe2 The name of species 2
+#' @return The length of each gene.
+#' getm(tree, primates, "Mouse", "Bovine")
 getm <- function(tree, phydat, spe1, spe2){
 
   species <- tree$tip.label
@@ -247,15 +378,26 @@ getm <- function(tree, phydat, spe1, spe2){
   }
 }
 
+#' Get the number of potentially evolved convergent sites and print the probability that this occured by chance.
+#' @param tree A phylogenetic tree
+#' @param phydat An object of class phydat
+#' @param spe1 The name of species 1
+#' @param spe2 The name of species 2
+#' @param m The length of each gene (Up to what is desired to be evaluated). Default is entire gene
+#' @return The number of potentially convergent sites
+#' @examples
+#' convSiteData(tree, primates, "Mouse", "Bovine", 20)
+#' @export
 convSiteData <- function(tree, phydat, spe1, spe2, m=getm(tree, phydat, spe1, spe2)){
 
   numSites = 0
   for (i in 1:m){
     if (areCondSatisfied(tree, phydat, spe1, spe2, i)) {numSites = numSites + 1}
   }
-  print(sprintf("%d potentially convergent sites with a %d % probability of this occuring by chance.", numSites, probOfNSitesByChance(tree, spe1, spe2, m, n=numSites)))
+  print(sprintf("%d potentially convergent sites with a %d probability of this occuring by chance.", numSites, probOfNSitesByChance(tree, spe1, spe2, m, n=numSites)))
 
   return (numSites)
 
 }
+
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/conditionals.R
 \name{getBranchLength}
 \alias{getBranchLength}
-\title{Find the length of a branch from a given species to a given internal node.}
+\title{Find the (rounded) length of a branch from a given species to a given internal node.}
 \usage{
 getBranchLength(tree, spe, nodeNum)
 }
@@ -17,7 +17,7 @@ getBranchLength(tree, spe, nodeNum)
 The length of the branch between nodeNum and spe as given by tree.
 }
 \description{
-Find the length of a branch from a given species to a given internal node.
+Find the (rounded) length of a branch from a given species to a given internal node.
 }
 \examples{
 getBranchLength(tree, "Mouse", 15)

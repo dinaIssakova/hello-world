@@ -34,7 +34,34 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 #library(rgenesconverged)
-## basic example code
+# We use the example datasets from phangorn, tree and primates (see ./data).
+load("~/rgenesconverged/data/smallTree.rda")
+load("~/rgenesconverged/data/primates.rda")
+
+summary(smallTree)
+#>             Length Class  Mode     
+#> edge        4      -none- numeric  
+#> Nnode       1      -none- numeric  
+#> tip.label   2      -none- character
+#> edge.length 2      -none- numeric
+summary(primates)
+#>            Length Class  Mode   
+#> Mouse      217    -none- numeric
+#> Bovine     217    -none- numeric
+#> Lemur      217    -none- numeric
+#> Tarsier    217    -none- numeric
+#> Squir Monk 217    -none- numeric
+#> Jpn Macaq  217    -none- numeric
+#> Rhesus Mac 217    -none- numeric
+#> Crab-E.Mac 217    -none- numeric
+#> BarbMacaq  217    -none- numeric
+#> Gibbon     217    -none- numeric
+#> Orang      217    -none- numeric
+#> Gorilla    217    -none- numeric
+#> Chimp      217    -none- numeric
+#> Human      217    -none- numeric
+
+#getConvergent(smallTree, primates, "Mouse", 1)
 ```
 
 What is special about using `README.Rmd` instead of just `README.md`?
