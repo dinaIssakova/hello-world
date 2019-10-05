@@ -2,7 +2,7 @@
 % Please edit documentation in R/conditionals.R
 \name{probOfNSitesByChance}
 \alias{probOfNSitesByChance}
-\title{Calculate the probability that n sites between the two species will satisfy the conditions of convergent evolution by chance.}
+\title{Calculate likelihood of N chance 'convergent' sites}
 \usage{
 probOfNSitesByChance(tree, spe1, spe2, m, n, p = (1/20))
 }

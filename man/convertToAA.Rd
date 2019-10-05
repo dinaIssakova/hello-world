@@ -2,7 +2,7 @@
 % Please edit documentation in R/conditionals.R
 \name{convertToAA}
 \alias{convertToAA}
-\title{Convert a binary matrix representing the genomic sequence to one representing the amino acid sequence.}
+\title{Convert genomic to AA matrix}
 \usage{
 convertToAA(acctranData)
 }

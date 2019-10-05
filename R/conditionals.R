@@ -1,4 +1,5 @@
-
+#' Get length of branch in tree.
+#'
 #' Find the (rounded) length of a branch from a given species to a given internal node.
 #'
 #' @param tree A phylogenetic tree
@@ -32,6 +33,8 @@ getBranchLength<- function(tree, spe, nodeNum){
   return(round(len))
 }
 
+#' Get most recent common ancestor
+#'
 #' Get the most recent common ancestor between two nodes as given by the given tree.
 #'
 #' @param tree A phylogenetic tree
@@ -85,6 +88,8 @@ getMostRecentCommonAncestor<- function(tree, spe1, spe2){
   }
 }
 
+#' Convert DNA base format
+#'
 #' Map DNA bases to a number vector with 1=A, 2=C, 3=G, 4=T.
 #'
 #' @param numVec The vector to be mapped.
@@ -113,6 +118,8 @@ mapLetters <- function(numVec){
   return (retVec)
 }
 
+#' Determine if convergently evolved
+#'
 #' Determine whether conditions are satisfied for two species to be convergently evolved at a given position.
 #'
 #' @param tree A phylogenetic tree
@@ -161,6 +168,8 @@ areCondSatisfied <- function(tree, phydat, spe1, spe2, pos, anc){
   return (cond1 && cond2 && cond3)
 }
 
+#' Convert genomic to AA matrix
+#'
 #' Convert a binary matrix representing the genomic sequence to one representing the amino acid sequence.
 #'
 #' @param acctranData A matrix of binary data as returned by phangorn function acctran().
@@ -200,6 +209,8 @@ convertToAA <- function(acctranData){
   return (AAmatrix)
 }
 
+#' Calculate mutation probability over 1 PAM
+#'
 #' Calculate the probability of one amino acid mutating into another over a distance of 1 PAM.
 #'
 #' @param pam The PAM matrix (given in ./data)
@@ -215,6 +226,8 @@ probOfChange1PAM <- function(pam, AA1, AA2){
 
 }
 
+#' Calculate mutation probability
+#'
 #' Calculate the probability of one amino acid mutating into another over a given branch length.
 #'
 #' @param pam The PAM matrix given in ./data.
@@ -242,6 +255,8 @@ probOfChange <- function(pam, AA1, AA2, d){
   return(prob)
 }
 
+#' Calculate likihood of chance condition satisfaction
+#'
 #' Calculate the probability that an amino acid site will satisfy the conditions of convergent evolution by chance.
 #'
 #' @param tree A phylogenetic tree
@@ -282,6 +297,8 @@ probOfSiteConfig <- function(tree, phydat, spe1, spe2, pos, p=(1/20)){
   return (p * prob1 * prob2)
 }
 
+#' Calculate likelihood of N chance 'convergent' sites
+#'
 #' Calculate the probability that n sites between the two species will satisfy the conditions of convergent evolution by chance.
 #'
 #' @param tree A phylogenetic tree
@@ -316,6 +333,8 @@ probOfNSitesByChance <- function(tree, spe1, spe2, m, n, p=(1/20)){
   return (1 - prob)
 }
 
+#' Find convergent species
+#'
 #' For a given species, find others in the tree that satisfy the conditions of convergent evolution at a certain position with a less than 0.05 chance of this having occured by chance.
 #'
 #' @param tree A phylogenetic tree
@@ -350,6 +369,8 @@ getConvergent <- function(tree, phydat, spe, pos, anc){
   return (convSpe)
 }
 
+#' Get gene length
+#'
 #' Get the length of two genes. (Genes must be of equal length.)
 #'
 #' @param tree A phylogenetic tree
@@ -378,6 +399,8 @@ getm <- function(tree, phydat, spe1, spe2){
   }
 }
 
+#' Get number of convergent sites
+#'
 #' Get the number of potentially evolved convergent sites and print the probability that this occured by chance.
 #' @param tree A phylogenetic tree
 #' @param phydat An object of class phydat

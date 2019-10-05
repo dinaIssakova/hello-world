@@ -2,7 +2,7 @@
 % Please edit documentation in R/conditionals.R
 \name{getMostRecentCommonAncestor}
 \alias{getMostRecentCommonAncestor}
-\title{Get the most recent common ancestor between two nodes as given by the given tree.}
+\title{Get most recent common ancestor}
 \usage{
 getMostRecentCommonAncestor(tree, spe1, spe2)
 }

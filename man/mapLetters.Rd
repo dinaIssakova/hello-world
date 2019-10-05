@@ -2,7 +2,7 @@
 % Please edit documentation in R/conditionals.R
 \name{mapLetters}
 \alias{mapLetters}
-\title{Map DNA bases to a number vector with 1=A, 2=C, 3=G, 4=T.}
+\title{Convert DNA base format}
 \usage{
 mapLetters(numVec)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/conditionals.R
 \name{areCondSatisfied}
 \alias{areCondSatisfied}
-\title{Determine whether conditions are satisfied for two species to be convergently evolved at a given position.}
+\title{Determine if convergently evolved}
 \usage{
 areCondSatisfied(tree, phydat, spe1, spe2, pos, anc)
 }

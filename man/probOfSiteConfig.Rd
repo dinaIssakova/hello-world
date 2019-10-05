@@ -2,7 +2,7 @@
 % Please edit documentation in R/conditionals.R
 \name{probOfSiteConfig}
 \alias{probOfSiteConfig}
-\title{Calculate the probability that an amino acid site will satisfy the conditions of convergent evolution by chance.}
+\title{Calculate likihood of chance condition satisfaction}
 \usage{
 probOfSiteConfig(tree, phydat, spe1, spe2, pos, p = (1/20))
 }

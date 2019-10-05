@@ -2,7 +2,7 @@
 % Please edit documentation in R/conditionals.R
 \name{convSiteData}
 \alias{convSiteData}
-\title{Get the number of potentially evolved convergent sites and print the probability that this occured by chance.}
+\title{Get number of convergent sites}
 \usage{
 convSiteData(tree, phydat, spe1, spe2, m = getm(tree, phydat, spe1,
   spe2))

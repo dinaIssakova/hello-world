@@ -2,7 +2,7 @@
 % Please edit documentation in R/conditionals.R
 \name{probOfChange}
 \alias{probOfChange}
-\title{Calculate the probability of one amino acid mutating into another over a given branch length.}
+\title{Calculate mutation probability}
 \usage{
 probOfChange(pam, AA1, AA2, d)
 }

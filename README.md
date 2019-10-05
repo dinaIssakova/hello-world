@@ -10,8 +10,8 @@
 The goal of rgenesconverged is to identify instances of convergent
 evolution by sequence similarity at the molecular level, by finding
 conserved, similar, and independently arising sequences within
-user-submitted phylogenetic trees. It’s modeled from concepts introduced
-in a seminal paper:
+user-submitted phylogenetic trees. For the mathematical model on which
+this package is based, please see:
 
 Zhang, J. and Kumar, S. (1997) Detection of Convergent and Parallel
 Evolution at the Amino Acid Sequence Level. Mol. Biol. Evol.
@@ -28,59 +28,56 @@ install_github("dinaIssakova/rgenesconverged")
 library(rgenesconverged)
 ```
 
-## Example
+## Overview
 
-This is a basic example which shows you how to solve a common problem:
+An overview of the package is illustrated below.
 
-``` r
-#library(rgenesconverged)
-# We use the example datasets from phangorn, tree and primates (see ./data).
-load("~/rgenesconverged/data/smallTree.rda")
-load("~/rgenesconverged/data/primates.rda")
+![](./inst/extdata/ISSAKOVA_D_A1.png)
 
-summary(smallTree)
-#>             Length Class  Mode     
-#> edge        4      -none- numeric  
-#> Nnode       1      -none- numeric  
-#> tip.label   2      -none- character
-#> edge.length 2      -none- numeric
-summary(primates)
-#>            Length Class  Mode   
-#> Mouse      217    -none- numeric
-#> Bovine     217    -none- numeric
-#> Lemur      217    -none- numeric
-#> Tarsier    217    -none- numeric
-#> Squir Monk 217    -none- numeric
-#> Jpn Macaq  217    -none- numeric
-#> Rhesus Mac 217    -none- numeric
-#> Crab-E.Mac 217    -none- numeric
-#> BarbMacaq  217    -none- numeric
-#> Gibbon     217    -none- numeric
-#> Orang      217    -none- numeric
-#> Gorilla    217    -none- numeric
-#> Chimp      217    -none- numeric
-#> Human      217    -none- numeric
+## Contributions
 
-#getConvergent(smallTree, primates, "Mouse", 1)
-```
+The author of the package is Dina Issakova. The functions available
+within this package include:
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+    rlibrary("rgenesconverged")
+    lsf.str("package:rgenesconverged")
 
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
+  - getBranchLength
+  - getMostRecentCommonAncestor
+  - mapLetters
+  - areCondSatisfied
+  - probOfChange
+  - probOfSiteConfig
+  - probOfNSitesByChance
+  - getConvergent
+  - convSiteData
+  - rgenesconvergedPlot
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date.
+All functions above were authored by Dina Issakova. Examples and help
+files make use of datasets available from phangorn R package and subsets
+of these datasets. PAM matrix included in dataset is manually copied
+from:
 
-You can also embed plots, for example:
+Dayhoff, M.O. et al. (1978) A model of evolutionary change in proteins.
+Atlas of Protein Sequence and Structure. p. 345-352
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+The getMostRecentCommonAncestor function makes use of commonly known
+algorithms for finding the deepest ancestor of two leaves in a binary
+tree. The areCondSatisfied and probOfSiteConfig functions make use of
+the phangorn R package function ancestral.pars to predict ancestral
+states of amino acid sequences based on branch length and mutation
+probabilities. The areCondSatisfied, probOfChange and probOfSiteConfig
+functions make use of the Biostrings R package to translate amino acid
+sequences using the standard genetic code and access standard lists of
+amino acids.
+
+The areCondSatisfied, probOfChange, probOfSiteConfig,
+probOfNSitesByChance, getConvergent and convSiteData implement
+mathematical models of genomic convergent evolution described in :
+
+Zhang, J. and Kumar, S. (1997) Detection of Convergent and Parallel
+Evolution at the Amino Acid Sequence Level. Mol. Biol. Evol.
+14(5):527-536.
+
+The rgenesconvergedPlot was authored by Dina Issakova and makes use of
+the package ggtree to plot the phylogenetic tree.

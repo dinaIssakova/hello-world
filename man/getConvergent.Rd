@@ -2,7 +2,7 @@
 % Please edit documentation in R/conditionals.R
 \name{getConvergent}
 \alias{getConvergent}
-\title{For a given species, find others in the tree that satisfy the conditions of convergent evolution at a certain position with a less than 0.05 chance of this having occured by chance.}
+\title{Find convergent species}
 \usage{
 getConvergent(tree, phydat, spe, pos, anc)
 }

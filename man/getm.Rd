@@ -2,7 +2,7 @@
 % Please edit documentation in R/conditionals.R
 \name{getm}
 \alias{getm}
-\title{Get the length of two genes. (Genes must be of equal length.)}
+\title{Get gene length}
 \usage{
 getm(tree, phydat, spe1, spe2)
 }

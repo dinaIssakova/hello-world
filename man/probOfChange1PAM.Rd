@@ -2,7 +2,7 @@
 % Please edit documentation in R/conditionals.R
 \name{probOfChange1PAM}
 \alias{probOfChange1PAM}
-\title{Calculate the probability of one amino acid mutating into another over a distance of 1 PAM.}
+\title{Calculate mutation probability over 1 PAM}
 \usage{
 probOfChange1PAM(pam, AA1, AA2)
 }
