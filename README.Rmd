@@ -1,0 +1,63 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# rgenesconverged
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of rgenesconverged is to identify instances of convergent evolution by sequence similarity at the molecular level, by finding conserved, similar, and independently arising sequences within user-submitted phylogenetic trees. It's modeled from concepts introduced in a seminal paper:
+
+Zhang, J. and Kumar, S. (1997) Detection of Convergent and Parallel Evolution at the Amino Acid Sequence Level. Mol. Biol. Evol. 14(5):527-536. 
+
+## Installation
+
+You can install the first-draft version of rgenesconverged from github with:
+
+``` r
+library(devtools)
+install_github("dinaIssakova/rgenesconverged")
+library(rgenesconverged)
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+#library(rgenesconverged)
+# We use the example datasets from phangorn, tree and primates (see ./data).
+
+summary(tree)
+summary(primates)
+
+getConvergent(tree, primates, "Mouse", 1)
+```
+
+What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+
+```{r cars}
+summary(cars)
+```
+
+You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
+
+You can also embed plots, for example:
+
+```{r pressure, echo = FALSE}
+plot(pressure)
+```
+
+
