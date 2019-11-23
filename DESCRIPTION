@@ -4,15 +4,22 @@ Title: A Package for Estimating Probability of Convergent Evolution from Genomic
 Version: 0.1.0
 Authors@R: person("Dina", "Issakova", email = "dina.issakova@mail.utoronto.ca",
   role = c("aut", "cre"))
+Maintainer: Dina Issakova <dina.issakova@mail.utoronto.ca>
 Description: rgenesconverged helps identify instances of convergent evolution by sequence similarity at the molecular level, by finding conserved, similar, and independently arising sequences within user-submitted phylogenetic trees.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Depends: R (>= 2.10)
+biocViews:
 RoxygenNote: 6.1.1
 Imports: 
     Biostrings,
     phangorn,
     seqLogo,
     ggtree,
-    testthat
-Depends: R (>= 2.10)
+    ggplot2,
+    testthat, 
+    foreach,
+    msa,
+    ape
+

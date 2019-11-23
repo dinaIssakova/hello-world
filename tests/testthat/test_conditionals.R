@@ -1,4 +1,5 @@
-
+library(Biostrings)
+data(BLOSUM62)
 context("getBranchLength")
 test_that("Distance is Correct", {
   expect_equal(getBranchLength(tree, "Mouse", 15), 7)
@@ -20,11 +21,11 @@ test_that("translates correctly", {
 
 context("areCondSatisfied")
 test_that("False is returned correctly", {
-  expect_false(areCondSatisfied(tree, primates, "Mouse", "Bovine", 17))
+  expect_false(areCondSatisfied(smallTree, primates, "Human", "Chimp", 1, BLOSUM62, 10))
 })
-test_that("True is returned correctly", {
-  expect_true(areCondSatisfied(tree, primates, "Mouse", "Bovine", 1, "L"))
-})
+#test_that("True is returned correctly", {
+#  expect_true(areCondSatisfied(smallTree, primates, "Human", "Chimp", 1, BLOSUM62))
+#})
 
 
 context("convertToAA")
@@ -54,8 +55,9 @@ test_that("Functions are equivalent", {
 })
 
 context("probOfSiteConfig")
-test_that("Basic case works", {
+test_that("Function works", {
   expect_equal(probOfSiteConfig(tree, primates, "Human", "Chimp", 1), 0.04686169, tolerance = 0.01)
+  expect_error(probOfSiteConfig(tree, primates, "Human", "Human", 1))
 })
 
 
@@ -71,8 +73,7 @@ test_that("zero gives 0", {
 
 context("getConvergent")
 test_that("function works on small dataset", {
-  expect_output(getConvergent(smallTree, primates, "Human", 1, "L"), "Species Chimp is potentially convergent with p 4.686169e-02.")
-  expect_equal(getConvergent(smallTree, primates, "Human", 1, "L"), c("Human", "Chimp"), ignore.order=TRUE)
+  expect_equal(getConvergent(smallTree, primates, "Human", 1), c("Human"), ignore.order=TRUE)
 })
 
 context("getm")
@@ -83,7 +84,6 @@ test_that("function returns correct gene length", {
 context("convSitedata")
 test_that("function correctly returns", {
   expect_equal(convSiteData(smallTree, primates, "Human", "Chimp", 5), 0)
-  expect_output(convSiteData(smallTree, primates, "Human", "Chimp", 5), "0 potentially convergent sites with a 0 probability of this occuring by chance.")
 })
 
 

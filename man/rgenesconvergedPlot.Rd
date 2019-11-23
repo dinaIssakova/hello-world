@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{rgenesconvergedPlot}
 \alias{rgenesconvergedPlot}
-\title{Plot the convergent network associated with the given gene at the given position on top of the phylogenetic tree.}
+\title{rgenesconvergedPlot}
 \usage{
 rgenesconvergedPlot(tree, phydat, spe, pos)
 }
@@ -17,8 +17,13 @@ rgenesconvergedPlot(tree, phydat, spe, pos)
 }
 \value{
 None
-rgenesconvergedPlot(tree, primates, "Mouse", 17)
 }
 \description{
-Plot the convergent network associated with the given gene at the given position on top of the phylogenetic tree.
+Plot tree associated with the given gene, accentuating convergent lineages.
+}
+\examples{
+\dontrun{
+rgenesconvergedPlot(tree, primates, "Mouse", 17)
+}
+
 }
