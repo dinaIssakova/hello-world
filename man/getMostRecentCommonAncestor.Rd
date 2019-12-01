@@ -2,7 +2,7 @@
 % Please edit documentation in R/getTreeData.R
 \name{getMostRecentCommonAncestor}
 \alias{getMostRecentCommonAncestor}
-\title{Get most recent common ancestor}
+\title{getMostRecentCommonAncestor}
 \usage{
 getMostRecentCommonAncestor(tree, spe1, spe2)
 }

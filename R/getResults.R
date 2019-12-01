@@ -7,19 +7,19 @@
 #' @param phydat An object of class phydat
 #' @param spe The species to compare others in the tree to
 #' @param pos The position at which to compare the genes
+#' @param t threshold
 #'
 #' @return A vector of species names which satisfy the conditions listed above.
 #' @examples
 #' \dontrun{
-#' getConvergent(tree, primates, "Human", 1)
+#' getConvergent(tree, primates, "Human", 1, 5)
 #' }
 #' @export
-getConvergent <- function(tree, phydat, spe, pos){
+getConvergent <- function(tree, phydat, spe, pos, type=c("abs, score"), t=NA){
   species <- tree$tip.label
   convSpe <- c(spe)
   for (s in species){
-      cond = areCondSatisfied(tree, phydat, s, spe, pos)
-
+      cond = areCondSatisfied(tree, phydat, s, spe, pos, type, threshold=t)
 
     if (s != spe && cond){
 
@@ -72,6 +72,7 @@ getm <- function(tree, phydat, spe1, spe2){
 #' @param spe1 The name of species 1
 #' @param spe2 The name of species 2
 #' @param m The length of each gene (Up to what is desired to be evaluated). Default is entire gene
+#' @param t threshold
 #'
 #' @return The number of potentially convergent sites
 #' @examples
@@ -79,15 +80,15 @@ getm <- function(tree, phydat, spe1, spe2){
 #' convSiteData(smallTree, primates, "Human", "Chimp", 5)
 #' }
 #' @export
-convSiteData <- function(tree, phydat, spe1, spe2, m=getm(tree, phydat, spe1, spe2)){
+convSiteData <- function(tree, phydat, spe1, spe2, t, type=c("abs", "score"), m=getm(tree, phydat, spe1, spe2)){
 
   numSites = 0
   for (i in 1:m){
-    if (areCondSatisfied(tree, phydat, spe1, spe2, i)) {
+    if (areCondSatisfied(tree, phydat, spe1, spe2, i, type=type, threshold=t)) {
       numSites = numSites + 1
       }
   }
-  print(sprintf("%i potentially convergent sites with a %e probability of this occuring by chance.", numSites, probOfNSitesByChance(tree, spe1, spe2, m, n=numSites)))
+  print(sprintf("%i potentially convergent sites with a %e probability of this occuring by chance.", numSites, probOfNSitesByChance(tree, spe1, spe2, m, n=numSites, t=t, type=type)))
 
   return (numSites)
 

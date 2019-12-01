@@ -2,7 +2,7 @@
 % Please edit documentation in R/getTreeData.R
 \name{getBranchLength}
 \alias{getBranchLength}
-\title{Get length of branch in tree.}
+\title{getBranchLength}
 \usage{
 getBranchLength(tree, spe, nodeNum)
 }

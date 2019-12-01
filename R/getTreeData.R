@@ -1,4 +1,4 @@
-#' Get length of branch in tree.
+#' getBranchLength
 #'
 #' Find the (rounded) length of a branch from a given species to a given internal node.
 #'
@@ -42,7 +42,7 @@ getBranchLength<- function(tree, spe, nodeNum){
   return(round(len))
 }
 
-#' Get most recent common ancestor
+#' getMostRecentCommonAncestor
 #'
 #' Get the most recent common ancestor between two nodes as given by the given tree.
 #'

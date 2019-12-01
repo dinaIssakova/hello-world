@@ -4,7 +4,8 @@
 \alias{probOfNSitesByChance}
 \title{Calculate probability of N chance 'convergent' sites}
 \usage{
-probOfNSitesByChance(tree, spe1, spe2, m, n, p = (1/20))
+probOfNSitesByChance(tree, phydat, spe1, spe2, m, n, p = (1/20),
+  t = NA, type = c("abs", "score"))
 }
 \arguments{
 \item{tree}{A phylogenetic tree}

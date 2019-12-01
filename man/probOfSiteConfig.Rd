@@ -2,9 +2,9 @@
 % Please edit documentation in R/probByChance.R
 \name{probOfSiteConfig}
 \alias{probOfSiteConfig}
-\title{Calculate likihood of chance condition satisfaction}
+\title{probOfSiteConfig}
 \usage{
-probOfSiteConfig(tree, phydat, spe1, spe2, pos, p = (1/20))
+probOfSiteConfig(tree, phydat, spe1, spe2, ...)
 }
 \arguments{
 \item{tree}{A phylogenetic tree}
@@ -20,10 +20,10 @@ probOfSiteConfig(tree, phydat, spe1, spe2, pos, p = (1/20))
 \item{p}{The fraction of the amino acid at the target position in the evaluated genome. (Default is 1/20)}
 }
 \value{
-Scaled likelihood that the amino acids satisfying the conditions of convergent evolution is by chance.
+Probability of given configuration
 }
 \description{
-Calculate the probability that an amino acid site will satisfy the conditions of convergent evolution by chance.
+Calculate the probability of the given configuration
 }
 \examples{
 probOfSiteConfig(tree, primates, "Human", "Chimp", 1)

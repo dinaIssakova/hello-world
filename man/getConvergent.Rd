@@ -4,7 +4,7 @@
 \alias{getConvergent}
 \title{Find convergent species}
 \usage{
-getConvergent(tree, phydat, spe, pos)
+getConvergent(tree, phydat, spe, pos, type = c("abs, score"), t = NA)
 }
 \arguments{
 \item{tree}{A phylogenetic tree}
@@ -14,6 +14,8 @@ getConvergent(tree, phydat, spe, pos)
 \item{spe}{The species to compare others in the tree to}
 
 \item{pos}{The position at which to compare the genes}
+
+\item{t}{threshold}
 }
 \value{
 A vector of species names which satisfy the conditions listed above.
@@ -23,6 +25,6 @@ For a given species, find others in the tree that satisfy the conditions of conv
 }
 \examples{
 \dontrun{
-getConvergent(tree, primates, "Human", 1)
+getConvergent(tree, primates, "Human", 1, 5)
 }
 }

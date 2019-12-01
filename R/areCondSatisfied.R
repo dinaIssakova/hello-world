@@ -1,13 +1,34 @@
+#' matrixtoAAString
+#'
+#' @import Biostrings
+#'
+#' @description Convert matrix generated during workflow of areCondSatisfied to AA sequence.
+#'
+#' @param m matrix to be converted
+#'
+#' @return AAString object
+matrixtoAAString <- function(m){
+
+  seqString = c()
+
+  for (i in 1:nrow(m)){
+
+    seqString <- paste(seqString, colnames(m)[which(m[i,] == 1)], sep='')
+
+  }
+
+  #ret = Biostrings::AAString(seqString)
+
+  return(seqString)
+}
 
 #' Convert DNA base format
 #'
-#' Map DNA bases to a number vector with 1=A, 2=C, 3=G, 4=T.
+#' @description Map DNA bases to a number vector with 1=A, 2=C, 3=G, 4=T.
 #'
 #' @param numVec The vector to be mapped.
 #'
 #' @return A vector of equivalent length with each value mapped to the appropriate base.
-#'
-
 mapLetters <- function(numVec){
 
   retVec = c()
@@ -29,16 +50,16 @@ mapLetters <- function(numVec){
   return (retVec)
 }
 
-#' Convert genomic to AA matrix
+#' convertToAA
 #'
-#' Convert a binary matrix representing the genomic sequence to one representing the amino acid sequence.
+#' @import Biostrings
+#'
+#' @description Convert a binary matrix representing the genomic sequence to one representing the amino acid sequence.
 #'
 #' @param acctranData A matrix of binary data as returned by phangorn function acctran().
 #'
 #' @return A matrix of amino acid data.
 #'
-#' @import Biostrings
-
 convertToAA <- function(acctranData){
 
   numrow = nrow(acctranData)
@@ -62,7 +83,8 @@ convertToAA <- function(acctranData){
     AAlist <- c()
     for (i in nrow(codonList)){
       seq = paste(c(as.character(codonList[i,1]), as.character(codonList[i,2]), as.character(codonList[i,3])), collapse='')
-      AAlist <- c(AAlist, toString(Biostrings::translate(DNAString(seq))))
+
+      AAlist <- c(AAlist, toString(Biostrings::translate(Biostrings::DNAString(x=seq))))
     }
     for (item in codonList){
       AAmatrix[AArow,][which(colnames(AAmatrix)%in%AAlist)] = 1
@@ -72,22 +94,6 @@ convertToAA <- function(acctranData){
   }
   return (AAmatrix)
 }
-
-matrixtoAAString <- function(m){
-
-  seqString = c()
-
-  for (i in 1:nrow(m)){
-
-    seqString <- paste(seqString, colnames(m)[which(m[i,] == 1)])
-
-  }
-
-  ret = Biostrings::AAString(seqString)
-
-  return(ret)
-}
-
 
 #' areCondSatisfied
 #'
@@ -110,60 +116,45 @@ matrixtoAAString <- function(m){
 #' @examples
 #' \dontrun{
 #' data(BLOSUM62)
-#' areCondSatisfied(smallTree, primates, "Human", "Chimp", 1, 10, BLOSUM62)
+#' areCondSatisfied(smallTree, primates, "Human", "Chimp", pos=1, type="abs", 1, BLOSUM62)
+#' areCondSatisfied(tree, primates, "Human", "Chimp", pos=2, type="score", threshold=0, BLOSUM62)
+#' areCondSatisfied(tree, primates, "Human", "Chimp", pos=3, type="score", threshold=0, BLOSUM62)
 #' }
 #'
 #' @import phangorn
 #'
 #' @export
-areCondSatisfied <- function(tree, phydat, spe1, spe2, pos, simMatrix=BLOSUM62, threshold=1){
+areCondSatisfied <- function(tree, phydat, spe1, spe2, pos, type=c("abs", "score"), threshold, simMatrix=BLOSUM62){
 
-  species <- tree$tip.label
 
-  speNum1 = which(species == spe1)
-  speNum2 = which(species == spe2)
+  msaAnc <- getAlignment(tree, phydat, spe1, spe2)
+  x = toString(msaAnc[1][[1]][pos])
+  y = toString(msaAnc[2][[1]][pos])
+  anc = toString(msaAnc[3][[1]][pos])
 
-  anc.acctran <- phangorn::ancestral.pars(tree, phydat, "ACCTRAN")
 
-  geneMat1 = convertToAA(anc.acctran[[speNum1]])
-  geneMat2 = convertToAA(anc.acctran[[speNum2]])
+  if (type=="score"){
+    # Get the score
+    # Match score: how similar are the two AAs based on the simMatrix
 
-  if (geneMat1[pos,which(colnames(geneMat1) == '*')] | geneMat2[pos,which(colnames(geneMat2) == '*')]){
-    print(sprintf("Cannot evaluate convergence for location of stop codon at position %i. Returning FALSE.", pos))
-    return (FALSE)
+    mScore <- simMatrix[which(rownames(simMatrix) == x), which(colnames(simMatrix) == y)]
+    # Difference score: how different is the reference species from the ancestor
+    dScore <- simMatrix[which(rownames(simMatrix) == x), which(colnames(simMatrix) == anc)]
+    score = mScore - dScore
+
+    #Condition is satisfied if the score is higher or equal to the threshold.
+    cond <- score >= threshold
+
+  } else if (type=="abs"){
+
+    #Condition is satisfied if the two species' AA's are identical and different from the ancestral state
+    # Based on:
+    # Zhang, J. and Kumar, S. (1997) Detection of Convergent and Parallel Evolution at the Amino Acid Sequence
+    # Level. Mol. Biol. Evol. 14(5):527-536.
+
+    cond = ((x == y) && (x != anc) && (y != anc))
+
   }
-
-  geneSeq1 = matrixtoAAString(convertToAA(anc.acctran[[speNum1]]))
-  geneSeq2 = matrixtoAAString(convertToAA(anc.acctran[[speNum2]]))
-
-  phyloSet <- Biostrings::AAStringSet(list(geneSeq1, geneSeq2))
-
-  phyloSet@ranges@NAMES <- c(spe1, spe2)
-
-  # Align both sequences together.
-
-  msaM <-  msa::msaMuscle(phyloSet, order = "aligned")
-
-   # fetch the BLOSUM62 package from the Biostrings package
-  msaMScores <- msa::msaConservationScore(msaM, substitutionMatrix = simMatrix)
-
-  simscore = msaMScores[pos]
-
-  ancSeq = matrixtoAAString(convertToAA(anc.acctran[[getMostRecentCommonAncestor(tree, spe1, spe2)]]))
-
-  phyloSet1 <- Biostrings::AAStringSet(list(geneSeq1, ancSeq))
-
-  phyloSet1@ranges@NAMES <- c(spe1, "ancestral")
-
-  msaAnc <-  msa::msaMuscle(phyloSet1, order = "aligned")
-
-  msaAncScores <- msa::msaConservationScore(msaAnc, substitutionMatrix = simMatrix)
-
-  ancScore <- -msaAncScores[pos]
-
-  totalscore = ancScore + simscore
-
-  cond = totalscore >= threshold
 
   return (cond)
 }

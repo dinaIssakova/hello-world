@@ -20,12 +20,9 @@ test_that("translates correctly", {
 })
 
 context("areCondSatisfied")
-test_that("False is returned correctly", {
-  expect_false(areCondSatisfied(smallTree, primates, "Human", "Chimp", 1, BLOSUM62, 10))
+test_that("True is returned correctly", {
+  expect_true(areCondSatisfied(tree, primates, "Human", "Chimp", pos=2, type="score", threshold=0, BLOSUM62))
 })
-#test_that("True is returned correctly", {
-#  expect_true(areCondSatisfied(smallTree, primates, "Human", "Chimp", 1, BLOSUM62))
-#})
 
 
 context("convertToAA")
@@ -56,25 +53,29 @@ test_that("Functions are equivalent", {
 
 context("probOfSiteConfig")
 test_that("Function works", {
-  expect_equal(probOfSiteConfig(tree, primates, "Human", "Chimp", 1), 0.04686169, tolerance = 0.01)
-  expect_error(probOfSiteConfig(tree, primates, "Human", "Human", 1))
+  expect_equal(probOfSiteConfig(tree, primates, "Human", "Chimp", pos=1), 0.04686169, tolerance = 0.01)
+  expect_error(probOfSiteConfig(tree, primates, "Human", "Human", pos=1))
 })
 
 
 context("probOfNSitesByChance")
 test_that("Basic case works", {
-  expect_equal(probOfNSitesByChance(tree, "Human", "Chimp", 20, 2), -3.004794e+36, tolerance = 0.01)
+  expect_equal(probOfNSitesByChance(tree, primates, spe1="Human", spe2="Chimp", m=20, n=2, type="abs"), -5.905249e+36, tolerance = 0.01)
 })
+
+
 
 context("probOfNSitesByChance")
 test_that("zero gives 0", {
-  expect_equal(probOfNSitesByChance(tree, "Human", "Chimp", 20, 0), 0)
+  expect_equal(probOfNSitesByChance(tree, primates, spe1="Human", spe2="Chimp", m=20, n=0, type="abs"), 0)
 })
+
 
 context("getConvergent")
 test_that("function works on small dataset", {
-  expect_equal(getConvergent(smallTree, primates, "Human", 1), c("Human"), ignore.order=TRUE)
+  expect_equal(getConvergent(smallTree, primates, "Human", 1, type="abs"), c("Human"), ignore.order=TRUE)
 })
+
 
 context("getm")
 test_that("function returns correct gene length", {
@@ -83,11 +84,8 @@ test_that("function returns correct gene length", {
 
 context("convSitedata")
 test_that("function correctly returns", {
-  expect_equal(convSiteData(smallTree, primates, "Human", "Chimp", 5), 0)
+  expect_equal(convSiteData(smallTree, primates, "Human", "Chimp", t=5, type="abs", m=5), 0)
 })
-
-
-
 
 
 

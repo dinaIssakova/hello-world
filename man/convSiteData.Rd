@@ -4,8 +4,8 @@
 \alias{convSiteData}
 \title{Get number of convergent sites}
 \usage{
-convSiteData(tree, phydat, spe1, spe2, m = getm(tree, phydat, spe1,
-  spe2))
+convSiteData(tree, phydat, spe1, spe2, t, type = c("abs", "score"),
+  m = getm(tree, phydat, spe1, spe2))
 }
 \arguments{
 \item{tree}{A phylogenetic tree}
@@ -15,6 +15,8 @@ convSiteData(tree, phydat, spe1, spe2, m = getm(tree, phydat, spe1,
 \item{spe1}{The name of species 1}
 
 \item{spe2}{The name of species 2}
+
+\item{t}{threshold}
 
 \item{m}{The length of each gene (Up to what is desired to be evaluated). Default is entire gene}
 }
