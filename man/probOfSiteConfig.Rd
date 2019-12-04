@@ -4,7 +4,7 @@
 \alias{probOfSiteConfig}
 \title{probOfSiteConfig}
 \usage{
-probOfSiteConfig(tree, phydat, spe1, spe2, ...)
+probOfSiteConfig(tree, phydat, spe1, spe2, pos, p = (1/20), anc, x, y)
 }
 \arguments{
 \item{tree}{A phylogenetic tree}
@@ -26,5 +26,5 @@ Probability of given configuration
 Calculate the probability of the given configuration
 }
 \examples{
-probOfSiteConfig(tree, primates, "Human", "Chimp", 1)
+probOfSiteConfig(tree, primates, "Human", "Chimp", pos=1)
 }

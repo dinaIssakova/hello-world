@@ -19,10 +19,14 @@ getConvergent <- function(tree, phydat, spe, pos, type=c("abs, score"), t=NA){
   species <- tree$tip.label
   convSpe <- c(spe)
   for (s in species){
-      cond = areCondSatisfied(tree, phydat, s, spe, pos, type, threshold=t)
+      data(BLOSUM62)
+
+      #Is this species convergent with spe?
+      cond = areCondSatisfied(tree, phydat, s, spe, pos, type, threshold=t, BLOSUM62)
 
     if (s != spe && cond){
-
+      # If it is (and it isn't spe)
+      # Find the probability that this is by chance
       p = probOfSiteConfig(tree, primates, s, spe, pos)
       print(sprintf("Species %s is potentially convergent with p %e.", s, p))
       if (p < 0.05){
@@ -43,24 +47,19 @@ getConvergent <- function(tree, phydat, spe, pos, type=c("abs, score"), t=NA){
 #' @param spe1 The name of species 1
 #' @param spe2 The name of species 2
 #' @return The length of each gene.
-#' getm(tree, primates, "Mouse", "Bovine")
+#'
 getm <- function(tree, phydat, spe1, spe2){
 
-  species <- tree$tip.label
+  # Get length of gene sequences being compared.
 
-  speNum1 = which(species == spe1)
-  speNum2 = which(species == spe2)
+  geneSeq1 <- getSeq(tree, phydat, spe1)
+  geneSeq2 <- getSeq(tree, phydat, spe2)
 
-  anc.acctran <- ancestral.pars(tree, phydat, "ACCTRAN")
-
-  geneSeq1 = convertToAA(anc.acctran[[speNum1]])
-  geneSeq2 = convertToAA(anc.acctran[[speNum2]])
-
-  if (nrow(geneSeq1) != nrow(geneSeq2)){
+  if (width(geneSeq1) != width(geneSeq2)){
     print("Unequal gene lengths")
     stop()
   } else {
-    return (nrow(geneSeq1))
+    return (width(geneSeq1))
   }
 }
 
@@ -84,6 +83,7 @@ convSiteData <- function(tree, phydat, spe1, spe2, t, type=c("abs", "score"), m=
 
   numSites = 0
   for (i in 1:m){
+    # Get number of convergent sites
     if (areCondSatisfied(tree, phydat, spe1, spe2, i, type=type, threshold=t)) {
       numSites = numSites + 1
       }

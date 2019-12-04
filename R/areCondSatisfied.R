@@ -102,6 +102,8 @@ convertToAA <- function(acctranData){
 #' @import msa
 #' @import Biostrings
 #'
+#' @references{}
+#'
 #' @param tree A phylogenetic tree
 #' @param phydat An object of class phydat
 #' @param spe1 The name of species 1
@@ -124,24 +126,26 @@ convertToAA <- function(acctranData){
 #' @import phangorn
 #'
 #' @export
-areCondSatisfied <- function(tree, phydat, spe1, spe2, pos, type=c("abs", "score"), threshold, simMatrix=BLOSUM62){
-
+areCondSatisfied <- function(tree, phydat, spe1, spe2, pos, type=c("abs", "score"), threshold=NA, simMatrix=BLOSUM62){
 
   msaAnc <- getAlignment(tree, phydat, spe1, spe2)
   x = toString(msaAnc[1][[1]][pos])
   y = toString(msaAnc[2][[1]][pos])
   anc = toString(msaAnc[3][[1]][pos])
-
+  cond = FALSE
 
   if (type=="score"){
+
+    if(missing(threshold)){
+      print("Missing threshold argument!")
+      stop()
+    }
     # Get the score
     # Match score: how similar are the two AAs based on the simMatrix
-
     mScore <- simMatrix[which(rownames(simMatrix) == x), which(colnames(simMatrix) == y)]
     # Difference score: how different is the reference species from the ancestor
     dScore <- simMatrix[which(rownames(simMatrix) == x), which(colnames(simMatrix) == anc)]
     score = mScore - dScore
-
     #Condition is satisfied if the score is higher or equal to the threshold.
     cond <- score >= threshold
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mutProb.R
 \name{probOfChange}
 \alias{probOfChange}
-\title{Calculate mutation probability}
+\title{probOfChange}
 \usage{
 probOfChange(pam, AA1, AA2, d)
 }

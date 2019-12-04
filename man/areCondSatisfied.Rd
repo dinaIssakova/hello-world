@@ -4,8 +4,16 @@
 \alias{areCondSatisfied}
 \title{areCondSatisfied}
 \usage{
-areCondSatisfied(tree, phydat, spe1, spe2, pos, type = c("abs", "score"),
-  threshold, simMatrix = BLOSUM62)
+areCondSatisfied(
+  tree,
+  phydat,
+  spe1,
+  spe2,
+  pos,
+  type = c("abs", "score"),
+  threshold,
+  simMatrix = BLOSUM62
+)
 }
 \arguments{
 \item{tree}{A phylogenetic tree}

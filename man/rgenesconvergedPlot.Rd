@@ -4,7 +4,7 @@
 \alias{rgenesconvergedPlot}
 \title{rgenesconvergedPlot}
 \usage{
-rgenesconvergedPlot(tree, phydat, spe, pos, t, type = c("abs", "score"))
+rgenesconvergedPlot(tree, phydat, spe, pos, th, type = c("abs", "score"))
 }
 \arguments{
 \item{tree}{A phylogenetic tree}
@@ -25,7 +25,7 @@ Plot tree associated with the given gene, accentuating convergent lineages.
 }
 \examples{
 \dontrun{
-rgenesconvergedPlot(tree, primates, "Mouse", pos=17, t=3, type="abs")
+rgenesconvergedPlot(tree, primates, "Mouse", pos=17, th=3, type="abs")
 }
 
 }

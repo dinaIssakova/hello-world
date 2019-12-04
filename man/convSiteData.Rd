@@ -4,8 +4,15 @@
 \alias{convSiteData}
 \title{Get number of convergent sites}
 \usage{
-convSiteData(tree, phydat, spe1, spe2, t, type = c("abs", "score"),
-  m = getm(tree, phydat, spe1, spe2))
+convSiteData(
+  tree,
+  phydat,
+  spe1,
+  spe2,
+  t,
+  type = c("abs", "score"),
+  m = getm(tree, phydat, spe1, spe2)
+)
 }
 \arguments{
 \item{tree}{A phylogenetic tree}

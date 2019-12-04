@@ -1,6 +1,5 @@
-#runrgenesconverged <- function() {
- # appDir <- system.file('inst/shiny-scripts', package = "rgenesconverged")
-  #shiny::runApp(appDir, display.mode = "normal")
-#  return()
-#}
+shinyRgenesconverged <- function() {
+  shiny::runApp('inst/shiny-scripts')
+  return()
+}
 

@@ -1,3 +1,12 @@
+#' Title
+#'
+#' @param tree
+#' @param phydat
+#' @param spe
+#' @param speNum
+#'
+#' @return
+
 getSeq <- function(tree, phydat, spe, speNum){
 
   species <- tree$tip.label
@@ -14,6 +23,14 @@ getSeq <- function(tree, phydat, spe, speNum){
 }
 
 
+#' Title
+#'
+#' @param tree
+#' @param phydat
+#' @param spe1
+#' @param spe2
+#'
+#' @return
 getAlignment <- function(tree, phydat, spe1, spe2){
 
   geneSeq1 <- getSeq(tree, phydat, spe1)
@@ -24,5 +41,5 @@ getAlignment <- function(tree, phydat, spe1, spe2){
   phyloSet1 <- Biostrings::AAStringSet(mySeq)
   msaAnc <-  msa::msaClustalOmega(phyloSet1)
 
-  return(unmasked(msaAnc))
+  return(Biostrings::unmasked(msaAnc))
 }

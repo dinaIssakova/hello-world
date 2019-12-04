@@ -33,13 +33,16 @@ getBranchLength<- function(tree, spe, nodeNum){
   len = 0
   len = len + tree$edge.length[rowNum]
 
+  # Iterate over tree backwards, adding edge length, until hitting the other node
+
   while(!is.na(ancNum) && ancNum != nodeNum){
     leafNum = ancNum
     rowNum = which(tree$edge[ ,2] == leafNum)
     ancNum = as.numeric((tree$edge[rowNum, ])[1])
     len = len + tree$edge.length[rowNum]
   }
-  return(round(len))
+  # Sometimes directions get reversed during tree generation: can't have negative values.
+  return(abs(round(len)))
 }
 
 #' getMostRecentCommonAncestor
@@ -72,6 +75,10 @@ getMostRecentCommonAncestor<- function(tree, spe1, spe2){
   visited <- c()
   row1 = tree$edge[which(tree$edge[,2] == leafNum1),]
   anc1 = as.numeric(row1[1])
+
+  # Go through tree backwards, recording visiting nodes, until we find one visited
+  # from both nodes using this method
+  # That will be the MRCA
 
   while (!is.na(anc1)){
 
