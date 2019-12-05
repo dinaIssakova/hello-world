@@ -134,3 +134,7 @@ the package ggtree and ggplot to plot the phylogenetic tree.
 Specifically, Dina Issakova’s contribution was 1) implementing the
 mathematical model described by Zhang and Kumar above and 2) extending
 the model by adding a score-based exploratory function.
+
+## Walkthrough
+
+For walkthrough, please see vignettes.
