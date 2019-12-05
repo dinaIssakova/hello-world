@@ -1,11 +1,13 @@
-#' Title
+#' getSeq
 #'
-#' @param tree
-#' @param phydat
-#' @param spe
-#' @param speNum
+#' @description Get the corresponding species' gene sequence.
 #'
-#' @return
+#' @param tree a phylogenetic tree
+#' @param phydat phydat object containing corresponding sequences
+#' @param spe name of species
+#' @param speNum optional: node (for ancestral reconstruction of internal nodes w/o species names)
+#'
+#' @return sequence
 
 getSeq <- function(tree, phydat, spe, speNum){
 
@@ -23,14 +25,16 @@ getSeq <- function(tree, phydat, spe, speNum){
 }
 
 
-#' Title
+#' getAlignment
 #'
-#' @param tree
-#' @param phydat
-#' @param spe1
-#' @param spe2
+#' @description Get MSA ClustalOmega alignment of the sequences of spe1 and spe2.
 #'
-#' @return
+#' @param tree phylogenetic tree
+#' @param phydat phydat object containing corresponding sequences
+#' @param spe1 name of species 1
+#' @param spe2 name of species 2
+#'
+#' @return alignment
 getAlignment <- function(tree, phydat, spe1, spe2){
 
   geneSeq1 <- getSeq(tree, phydat, spe1)

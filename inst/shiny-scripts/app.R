@@ -48,7 +48,7 @@ server <- function(input, output, session) {
   output$mainPlot <- renderPlot({
     # Plot only when submit is selected.
     plot_reactive()
-    data(BLOSUM62)
+    #data(BLOSUM62)
 
     #Import input variables.
     phydat <- phangorn::read.phyDat(isolate(input$phydat$datapath), format="fasta")

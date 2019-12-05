@@ -25,6 +25,8 @@ convSiteData(
 
 \item{t}{threshold}
 
+\item{type}{Type of analysis: 'abs' for basic model or 'score' for by convergence score model}
+
 \item{m}{The length of each gene (Up to what is desired to be evaluated). Default is entire gene}
 }
 \value{

@@ -2,16 +2,22 @@
 % Please edit documentation in R/getAlign.R
 \name{getSeq}
 \alias{getSeq}
-\title{Title}
+\title{getSeq}
 \usage{
 getSeq(tree, phydat, spe, speNum)
 }
 \arguments{
-\item{speNum}{}
+\item{tree}{a phylogenetic tree}
+
+\item{phydat}{phydat object containing corresponding sequences}
+
+\item{spe}{name of species}
+
+\item{speNum}{optional: node (for ancestral reconstruction of internal nodes w/o species names)}
 }
 \value{
-
+sequence
 }
 \description{
-Title
+Get the corresponding species' gene sequence.
 }

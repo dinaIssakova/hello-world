@@ -1,7 +1,5 @@
 #' rgenesconvergedPlot
 #'
-#' @import ggtree
-#' @import ggplot2
 #'
 #' @description Plot tree associated with the given gene, accentuating convergent lineages.
 #'
@@ -9,7 +7,8 @@
 #' @param phydat An object of class phydat
 #' @param spe The name of the species to compare to
 #' @param pos The position of interest
-#' @param t threshold
+#' @param th threshold
+#' @param type Type of analysis: 'abs' for basic model or 'score' for by convergence score model
 #'
 #' @return None
 #'
@@ -22,6 +21,7 @@
 #' @importFrom ggtree groupOTU
 #' @importFrom ggtree geom_tiplab
 #' @importFrom ggtree geom_text2
+#' @importFrom ggtree aes
 #' @import ggplot2
 #' @export
 rgenesconvergedPlot <- function(tree, phydat, spe, pos, th, type=c("abs", "score")) {

@@ -10,6 +10,7 @@
 #'
 #' @examples
 #' getBranchLength(tree, "Mouse", 15)
+#'
 #' @export
 #' @importFrom ape is.binary
 getBranchLength<- function(tree, spe, nodeNum){

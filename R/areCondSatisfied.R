@@ -102,13 +102,13 @@ convertToAA <- function(acctranData){
 #' @import msa
 #' @import Biostrings
 #'
-#' @references{}
 #'
 #' @param tree A phylogenetic tree
 #' @param phydat An object of class phydat
 #' @param spe1 The name of species 1
 #' @param spe2 The name of species 2
 #' @param pos The position at which to evaluate if conditions are satisfied
+#' @param type Type of analysis: 'abs' for basic model or 'score' for by convergence score model
 #' (AA position with ref to species 1; others are aligned to species 1)
 #' @param simMatrix similarity matrix to quantify similarity between amino acids (default is BLOSUM62)
 #' @param threshold score threshold above which a position is considered convergent

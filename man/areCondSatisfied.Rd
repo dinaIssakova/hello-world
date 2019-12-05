@@ -11,7 +11,7 @@ areCondSatisfied(
   spe2,
   pos,
   type = c("abs", "score"),
-  threshold,
+  threshold = NA,
   simMatrix = BLOSUM62
 )
 }
@@ -24,7 +24,9 @@ areCondSatisfied(
 
 \item{spe2}{The name of species 2}
 
-\item{pos}{The position at which to evaluate if conditions are satisfied
+\item{pos}{The position at which to evaluate if conditions are satisfied}
+
+\item{type}{Type of analysis: 'abs' for basic model or 'score' for by convergence score model
 (AA position with ref to species 1; others are aligned to species 1)}
 
 \item{threshold}{score threshold above which a position is considered convergent}

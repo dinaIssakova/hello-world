@@ -9,9 +9,9 @@ Description: rgenesconverged helps identify instances of convergent evolution by
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 2.10)
+Depends: R (>= 3.5.0)
 biocViews:
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.1
 Imports: 
     Biostrings,
     phangorn,
@@ -20,6 +20,10 @@ Imports:
     ggplot2,
     testthat, 
     foreach,
+    shiny,
     msa,
     ape
-
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

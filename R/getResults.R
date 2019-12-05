@@ -1,12 +1,15 @@
 
 #' Find convergent species
 #'
-#' For a given species, find others in the tree that satisfy the conditions of convergent evolution at a certain position with a less than 0.05 chance of this having occured by chance.
+#' @description For a given species, find others in the tree that satisfy the conditions of convergent evolution at a certain position with a less than 0.05 chance of this having occured by chance.
+#'
+#' @import Biostrings
 #'
 #' @param tree A phylogenetic tree
 #' @param phydat An object of class phydat
 #' @param spe The species to compare others in the tree to
 #' @param pos The position at which to compare the genes
+#' @param type Type of analysis: 'abs' for basic model or 'score' for by convergence score model
 #' @param t threshold
 #'
 #' @return A vector of species names which satisfy the conditions listed above.
@@ -19,7 +22,8 @@ getConvergent <- function(tree, phydat, spe, pos, type=c("abs, score"), t=NA){
   species <- tree$tip.label
   convSpe <- c(spe)
   for (s in species){
-      data(BLOSUM62)
+      #library(Biostrings)
+      #data(BLOSUM62)
 
       #Is this species convergent with spe?
       cond = areCondSatisfied(tree, phydat, s, spe, pos, type, threshold=t, BLOSUM62)
@@ -72,6 +76,7 @@ getm <- function(tree, phydat, spe1, spe2){
 #' @param spe2 The name of species 2
 #' @param m The length of each gene (Up to what is desired to be evaluated). Default is entire gene
 #' @param t threshold
+#' @param type Type of analysis: 'abs' for basic model or 'score' for by convergence score model
 #'
 #' @return The number of potentially convergent sites
 #' @examples

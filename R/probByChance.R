@@ -4,13 +4,15 @@
 #' @description Obtain f - probability of any configuration satisfying the hypothesis of
 #' convergent evolution under the constraint of the given tree
 #'
+#' @import Biostrings
+#'
 #' @param tree a phylogenetic tree
 #' @param phydat a phyDat object containing the relevant alignment
 #' @param spe1 The name of species 1
 #' @param spe2 The name of species 2
 #' @param p Probability of occurence for any AA (default 1/20)
 #' @param type type of analysis: absolute ("abs") or by score ("score")
-#' @param threshold
+#' @param threshold minimum threshold for score option
 #'
 #' @return probability (f)
 #'
@@ -48,7 +50,8 @@ getf <- function(tree, phydat, spe1, spe2, p=(1/20), type=c("abs", "score"), thr
         for (anc in alph){
           # We count the total number of possibilities
           count = count + 1
-          data(BLOSUM62)
+          #library(Biostrings)
+          #data(BLOSUM62)
 
           score = BLOSUM62[which(colnames(BLOSUM62) == x), which(rownames(BLOSUM62 == y))]
           -  BLOSUM62[which(colnames(BLOSUM62) == x), which(rownames(BLOSUM62 == anc))]
@@ -81,6 +84,9 @@ getf <- function(tree, phydat, spe1, spe2, p=(1/20), type=c("abs", "score"), thr
 #' @param spe2 The name of species 2
 #' @param pos The position at which to evaluate if conditions are satisfied
 #' @param p The fraction of the amino acid at the target position in the evaluated genome. (Default is 1/20)
+#' @param anc ancestral AA value (for testing or internal input)
+#' @param x AA value of spe1 (for testing or internal input)
+#' @param y AA value of spe2 (for testing or internal input)
 #'
 #' @return Probability of given configuration
 #' @examples
@@ -143,12 +149,15 @@ probOfSiteConfig <- function(tree, phydat, spe1, spe2, pos, p=(1/20), anc, x, y)
 #' @importFrom ape is.binary
 #'
 #' @param tree A phylogenetic tree
+#' @param phydat PhyDat object containing corresponding alignment information
 #' @param spe1 The name of species 1
 #' @param spe2 The name of species 2
 #' @param m The length of the genes. (Must of equal length)
 #' @param n The number of potential convergent sites
 #' @param p The fraction of the amino acid at the target position in the evaluated genome.
 #'  (Default is 1/20)
+#' @param t threshold for score option
+#' @param type Type of analysis: 'abs' for basic model or 'score' for by convergence score model
 #'
 #' @return Scaled likelihood that the amino acids satisfying the conditions of convergent evolution is by chance.
 #'

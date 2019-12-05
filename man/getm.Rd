@@ -17,7 +17,6 @@ getm(tree, phydat, spe1, spe2)
 }
 \value{
 The length of each gene.
-getm(tree, primates, "Mouse", "Bovine")
 }
 \description{
 Get the length of two genes. (Genes must be of equal length.)

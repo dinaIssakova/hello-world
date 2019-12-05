@@ -1,6 +1,8 @@
 library(Biostrings)
-library(foreach)
-data(BLOSUM62)
+#library(foreach)
+#data(BLOSUM62)
+
+#Unit Testing
 context("getBranchLength")
 test_that("Distance is Correct", {
   expect_equal(getBranchLength(tree, "Mouse", 15), 7)

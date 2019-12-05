@@ -19,6 +19,8 @@ probOfNSitesByChance(
 \arguments{
 \item{tree}{A phylogenetic tree}
 
+\item{phydat}{PhyDat object containing corresponding alignment information}
+
 \item{spe1}{The name of species 1}
 
 \item{spe2}{The name of species 2}
@@ -29,6 +31,10 @@ probOfNSitesByChance(
 
 \item{p}{The fraction of the amino acid at the target position in the evaluated genome.
 (Default is 1/20)}
+
+\item{t}{threshold for score option}
+
+\item{type}{Type of analysis: 'abs' for basic model or 'score' for by convergence score model}
 }
 \value{
 Scaled likelihood that the amino acids satisfying the conditions of convergent evolution is by chance.

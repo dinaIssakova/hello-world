@@ -18,6 +18,12 @@ probOfSiteConfig(tree, phydat, spe1, spe2, pos, p = (1/20), anc, x, y)
 \item{pos}{The position at which to evaluate if conditions are satisfied}
 
 \item{p}{The fraction of the amino acid at the target position in the evaluated genome. (Default is 1/20)}
+
+\item{anc}{ancestral AA value (for testing or internal input)}
+
+\item{x}{AA value of spe1 (for testing or internal input)}
+
+\item{y}{AA value of spe2 (for testing or internal input)}
 }
 \value{
 Probability of given configuration

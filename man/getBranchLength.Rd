@@ -21,4 +21,5 @@ Find the (rounded) length of a branch from a given species to a given internal n
 }
 \examples{
 getBranchLength(tree, "Mouse", 15)
+
 }

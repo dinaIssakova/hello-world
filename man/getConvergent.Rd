@@ -15,6 +15,8 @@ getConvergent(tree, phydat, spe, pos, type = c("abs, score"), t = NA)
 
 \item{pos}{The position at which to compare the genes}
 
+\item{type}{Type of analysis: 'abs' for basic model or 'score' for by convergence score model}
+
 \item{t}{threshold}
 }
 \value{

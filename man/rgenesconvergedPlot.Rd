@@ -15,7 +15,9 @@ rgenesconvergedPlot(tree, phydat, spe, pos, th, type = c("abs", "score"))
 
 \item{pos}{The position of interest}
 
-\item{t}{threshold}
+\item{th}{threshold}
+
+\item{type}{Type of analysis: 'abs' for basic model or 'score' for by convergence score model}
 }
 \value{
 None

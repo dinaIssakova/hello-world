@@ -2,16 +2,22 @@
 % Please edit documentation in R/getAlign.R
 \name{getAlignment}
 \alias{getAlignment}
-\title{Title}
+\title{getAlignment}
 \usage{
 getAlignment(tree, phydat, spe1, spe2)
 }
 \arguments{
-\item{spe2}{}
+\item{tree}{phylogenetic tree}
+
+\item{phydat}{phydat object containing corresponding sequences}
+
+\item{spe1}{name of species 1}
+
+\item{spe2}{name of species 2}
 }
 \value{
-
+alignment
 }
 \description{
-Title
+Get MSA ClustalOmega alignment of the sequences of spe1 and spe2.
 }

@@ -20,6 +20,7 @@ A scaled probability of mutation.
 }
 \description{
 Calculate the probability of one amino acid mutating into another over a given branch length.
+Warning: Exponential runtime; test only on very small datasets.
 }
 \examples{
 probOfChange(pam, "L", "K", 3)

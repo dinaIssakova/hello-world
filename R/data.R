@@ -42,3 +42,13 @@
 #'
 #'
 "primates"
+
+#' Object of class phyDat containing sequences for species corresponding to tree.
+#'
+#' Standard BLOSUM62 substitution matrix
+#'
+#' @format matrix
+#'
+#' @source citation("Biostrings")
+#'
+"BLOSUM62"

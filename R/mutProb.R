@@ -27,7 +27,7 @@ probOfChange1PAM <- function(pam, AA1, AA2){
 #' Calculate the probability of one amino acid mutating into another over a given branch length.
 #' Warning: Exponential runtime; test only on very small datasets.
 #'
-#' @import foreach, Biostrings
+#' @import foreach Biostrings
 #'
 #' @param pam The PAM matrix given in ./data.
 #' @param AA1 The origin amino acid
@@ -52,6 +52,7 @@ probOfChange <- function(pam, AA1, AA2, d){
     return(prob)
   }
   foreach::foreach (j=1:length(AAlist), .packages="foreach") %do% {
+  #for (j in 1:length(AAlist)) {
     aa = AAlist[[j]]
     # We want to calculate the probability that AA1 got to AA2 through any possible path of AAs.
     # Thus for each AA, we add the probability of getting to it from AA1, then that AA mutating into AA2.
