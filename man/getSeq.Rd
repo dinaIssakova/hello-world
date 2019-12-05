@@ -21,3 +21,6 @@ sequence
 \description{
 Get the corresponding species' gene sequence.
 }
+\examples{
+getSeq(tree, primates, "Human")
+}

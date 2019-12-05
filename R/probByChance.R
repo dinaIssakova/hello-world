@@ -16,6 +16,7 @@
 #'
 #' @return probability (f)
 #'
+
 getf <- function(tree, phydat, spe1, spe2, p=(1/20), type=c("abs", "score"), threshold=NA){
 
   alph <- Biostrings::AA_ALPHABET[1:26]
@@ -50,18 +51,26 @@ getf <- function(tree, phydat, spe1, spe2, p=(1/20), type=c("abs", "score"), thr
         for (anc in alph){
           # We count the total number of possibilities
           count = count + 1
-          #library(Biostrings)
-          #data(BLOSUM62)
-
-          score = BLOSUM62[which(colnames(BLOSUM62) == x), which(rownames(BLOSUM62 == y))]
-          -  BLOSUM62[which(colnames(BLOSUM62) == x), which(rownames(BLOSUM62 == anc))]
+          print(x)
+          print(y)
+          print(anc)
+          if(x%in%colnames(BLOSUM62) && y%in%colnames(BLOSUM62) && anc%in%colnames(BLOSUM62)){
+            score = BLOSUM62[which(colnames(BLOSUM62) == x), which(rownames(BLOSUM62) == y)]
+            -  BLOSUM62[which(colnames(BLOSUM62) == x), which(rownames(BLOSUM62) == anc)]
+          } else {
+            warning("Warning: Amino Acid outside BLOSUM62 matrix.")
+            score = -100000
+          }
 
           if (is.na(threshold)){
             print("Please supply threshold.")
             stop()
           }
+          print(score)
           # We count the # of times that a given configuration satisfies our threshold
-          total = total + (score > threshold)
+          if (score > threshold){
+            total = total + 1
+          }
 
         }
 

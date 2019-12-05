@@ -25,3 +25,8 @@ Warning: Exponential runtime; test only on very small datasets.
 \examples{
 probOfChange(pam, "L", "K", 3)
 }
+\references{
+https://cran.r-project.org/web/packages/foreach/index.html
+
+citation("Biostrings")
+}

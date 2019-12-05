@@ -99,6 +99,7 @@ within this package include:
   - getConvergent
   - convSiteData
   - rgenesconvergedPlot
+  - shinyRgenesconverged
 
 All functions above were authored by Dina Issakova. Examples and help
 files make use of datasets available from phangorn R package and subsets
@@ -116,7 +117,8 @@ states of amino acid sequences based on branch length and mutation
 probabilities. The areCondSatisfied, probOfChange and probOfSiteConfig
 functions make use of the Biostrings R package to translate amino acid
 sequences using the standard genetic code and access standard lists of
-amino acids.
+amino acids. The probOfChange function makes use of the package foreach
+for parallelizing.
 
 The areCondSatisfied, probOfChange, probOfSiteConfig,
 probOfNSitesByChance, getConvergent and convSiteData implement
@@ -127,6 +129,8 @@ Evolution at the Amino Acid Sequence Level. Mol. Biol. Evol.
 14(5):527-536.
 
 The rgenesconvergedPlot was authored by Dina Issakova and makes use of
-the package ggtree to plot the phylogenetic tree.
+the package ggtree and ggplot to plot the phylogenetic tree.
 
-## Example Walkthrough
+Specifically, Dina Issakova’s contribution was 1) implementing the
+mathematical model described by Zhang and Kumar above and 2) extending
+the model by adding a score-based exploratory function.

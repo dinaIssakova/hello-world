@@ -17,3 +17,73 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(rgenesconverged)
 ```
+
+
+Environmental challenges impose on species an unrelenting pressure to adapt, and nowhere is
+this more evident than in the study of convergent evolution. Contrary to traditional assumptions
+of divergence, convergent evolution is the evolution of similar phenotypes in response
+to these challenges by species from independent evolutionary lineages. 
+Often we want to consider `microphenotypes', or phenotypes occuring at the protein level. In such a case, two similar proteins or protein motifs can arise independently in separate lineages and have a similar genetic code without having come from a common ancestor, rendering the traditional test for sequence dissimilarity invalid. This is
+referred to as sequence convergence, contrasting with functional, mechanistic, and structural
+convergence.
+
+rgenesconverged provides the ability to, in R: 
+
+* use Zhang and Kumar[1]'s traditional model for sequence convergence
+* Explore potentially convergent data
+* Obtain values of statistical significance for this data
+* Plot the results
+
+This document introduces you to dplyr's basic set of tools through the R environment. We also provide a graphical API through RShiny with a currently more limited selection of functions. 
+
+### Example: Primate Data
+
+We can explore the functionality of rgenesconverged using an example dataset of one gene across the primate evolutionary tree.
+This data comes from the package ape. 
+Paradis E. & Schliep K. 2018. ape 5.0: an environment for modern phylogenetics and evolutionary analyses in R. Bioinformatics 35: 526-528.
+
+Note that to use a dataset using the RShiny API, only the alignment is needed, and in FASTA format. Here the data is already formatted as a phylogenetic tree and a phydat alignment object. These files come pre-loaded in rgenesconverged.
+
+
+```{r}
+print(tree)
+print(primates)
+```
+
+Suppose we are interested in position 1, and determining whether or not it is an instance of convergence. 
+
+Let us first test this using Zhang and Kumar's [1] model. 
+
+```{r}
+areCondSatisfied(tree, primates, "Human", "Chimp", 2, type="abs")
+```
+
+We get false: this means that the residues are either equal, or one is equal to the (reconstructed by parsimony methods) ancestral state. 
+
+```{r}
+library(Biostrings)
+data(BLOSUM62)
+areCondSatisfied(tree, primates, "Human", "Chimp", pos=2, type="score", threshold=0, BLOSUM62)
+```
+
+What if we increase the threshold? 
+
+```{r}
+areCondSatisfied(tree, primates, "Human", "Chimp", pos=2, type="score", threshold=10, BLOSUM62)
+```
+
+Suppose we like the threshold where it is, at 0. How likely is this specific site configuration? 
+
+```{r}
+probOfSiteConfig(tree, primates, "Human", "Chimp", pos=2)
+```
+
+How likely is it that we got a score above our desgined threshold? (In other words, getting 1 match in a considered sequence of this length? Suppose, for runtime, that the sequence length is 2. )
+
+```{r}
+probOfNSitesByChance(tree, primates, "Human", "Chimp", n=1, m=2, t=0, type="score")
+```
+
+References
+
+[1] J. Zhang and S. Kumar, “Detection of convergent and parallel evolution at the amino acidsequence level,” Mol.  Biol.  Evol., vol.  14, no.  5, pp.  527–536, 1997.

@@ -78,18 +78,73 @@ The author of the package is Dina Issakova. The functions available within this 
 - getConvergent
 - convSiteData
 - rgenesconvergedPlot
+- shinyRgenesconverged
 
 All functions above were authored by Dina Issakova. Examples and help files make use of datasets available from phangorn R package and subsets of these datasets. PAM matrix included in dataset is manually copied from:
 
 Dayhoff, M.O. et al. (1978) A model of evolutionary change in proteins. Atlas of Protein Sequence and Structure. p. 345-352
 
 
-The getMostRecentCommonAncestor function makes use of commonly known algorithms for finding the deepest ancestor of two leaves in a binary tree. The areCondSatisfied and probOfSiteConfig functions make use of the phangorn R package function ancestral.pars to predict ancestral states of amino acid sequences based on branch length and mutation probabilities. The areCondSatisfied, probOfChange and probOfSiteConfig functions make use of the Biostrings R package to translate amino acid sequences using the standard genetic code and access standard lists of amino acids. 
+The getMostRecentCommonAncestor function makes use of commonly known algorithms for finding the deepest ancestor of two leaves in a binary tree. The areCondSatisfied and probOfSiteConfig functions make use of the phangorn R package function ancestral.pars to predict ancestral states of amino acid sequences based on branch length and mutation probabilities. The areCondSatisfied, probOfChange and probOfSiteConfig functions make use of the Biostrings R package to translate amino acid sequences using the standard genetic code and access standard lists of amino acids. The probOfChange function makes use of the package foreach for parallelizing.
 
 The areCondSatisfied, probOfChange, probOfSiteConfig, probOfNSitesByChance, getConvergent and convSiteData implement mathematical models of genomic convergent evolution described in : 
 
 Zhang, J. and Kumar, S. (1997) Detection of Convergent and Parallel Evolution at the Amino Acid Sequence Level. Mol. Biol. Evol. 14(5):527-536. 
 
-The rgenesconvergedPlot was authored by Dina Issakova and makes use of the package ggtree to plot the phylogenetic tree. 
+The rgenesconvergedPlot was authored by Dina Issakova and makes use of the package ggtree and ggplot to plot the phylogenetic tree. 
+
+Specifically, Dina Issakova's contribution was 1) implementing the mathematical model described by Zhang and Kumar above and 2) extending the model by adding a score-based exploratory function.
 
 ## Example Walkthrough
+
+
+We can explore the functionality of rgenesconverged using an example dataset of one gene across the primate evolutionary tree.
+This data comes from the package ape. 
+Paradis E. & Schliep K. 2018. ape 5.0: an environment for modern phylogenetics and evolutionary analyses in R. Bioinformatics 35: 526-528.
+
+Note that to use a dataset using the RShiny API, only the alignment is needed, and in FASTA format. Here the data is already formatted as a phylogenetic tree and a phydat alignment object. These files come pre-loaded in rgenesconverged.
+
+
+```{r}
+print(tree)
+print(primates)
+```
+
+Suppose we are interested in position 1, and determining whether or not it is an instance of convergence. 
+
+Let us first test this using Zhang and Kumar's [1] model. 
+
+```{r}
+areCondSatisfied(tree, primates, "Human", "Chimp", 2, type="abs")
+```
+
+We get false: this means that the residues are either equal, or one is equal to the (reconstructed by parsimony methods) ancestral state. 
+
+```{r}
+library(Biostrings)
+data(BLOSUM62)
+areCondSatisfied(tree, primates, "Human", "Chimp", pos=2, type="score", threshold=0, BLOSUM62)
+```
+
+What if we increase the threshold? 
+
+```{r}
+areCondSatisfied(tree, primates, "Human", "Chimp", pos=2, type="score", threshold=10, BLOSUM62)
+```
+
+Suppose we like the threshold where it is, at 0. How likely is this specific site configuration? 
+
+```{r}
+probOfSiteConfig(tree, primates, "Human", "Chimp", pos=2)
+```
+
+How likely is it that we got a score above our desgined threshold? (In other words, getting 1 match in a considered sequence of this length? Suppose, for runtime, that the sequence length is 2. )
+
+```{r}
+probOfNSitesByChance(tree, primates, "Human", "Chimp", n=1, m=2, t=0, type="score")
+```
+
+References
+
+[1] J. Zhang and S. Kumar, “Detection of convergent and parallel evolution at the amino acidsequence level,” Mol.  Biol.  Evol., vol.  14, no.  5, pp.  527–536, 1997.
+

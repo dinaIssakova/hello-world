@@ -29,6 +29,9 @@ probOfChange1PAM <- function(pam, AA1, AA2){
 #'
 #' @import foreach Biostrings
 #'
+#' @references https://cran.r-project.org/web/packages/foreach/index.html
+#' @references citation("Biostrings")
+#'
 #' @param pam The PAM matrix given in ./data.
 #' @param AA1 The origin amino acid
 #' @param AA2 The target amino acid

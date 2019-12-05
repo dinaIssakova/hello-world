@@ -8,6 +8,10 @@
 #' @param speNum optional: node (for ancestral reconstruction of internal nodes w/o species names)
 #'
 #' @return sequence
+#'
+#' @examples
+#' getSeq(tree, primates, "Human")
+#' @export
 
 getSeq <- function(tree, phydat, spe, speNum){
 
