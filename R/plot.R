@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' rgenesconvergedPlot(tree, primates, "Mouse", pos=17, th=3, type="abs")
+#' rgenesconvergedPlot(tree, primates, "Human", pos=1, th=5, type="score")
 #' }
 #'
 #' @importFrom ggtree ggtree
@@ -25,7 +25,6 @@
 #' @import ggplot2
 #' @export
 rgenesconvergedPlot <- function(tree, phydat, spe, pos, th, type=c("abs", "score")) {
-  print(tree$tip.label)
 
   convNodes <- getConvergent(tree, phydat, spe, pos, th, type=type)
   convNodes <- c(convNodes, spe)

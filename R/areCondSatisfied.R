@@ -134,6 +134,11 @@ areCondSatisfied <- function(tree, phydat, spe1, spe2, pos, type=c("abs", "score
   anc = toString(msaAnc[3][[1]][pos])
   cond = FALSE
 
+  if (x=='-' | y=='-' | anc=='-'){
+    message("Gap detected; cannot evaluate convergence.")
+    return(FALSE)
+  }
+
   if (type=="score"){
 
     if(missing(threshold)){

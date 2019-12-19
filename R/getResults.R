@@ -22,6 +22,7 @@ getConvergent <- function(tree, phydat, spe, pos, type=c("abs, score"), t=NA){
   species <- tree$tip.label
   convSpe <- c(spe)
   for (s in species){
+    print(s)
       #library(Biostrings)
       #data(BLOSUM62)
 
