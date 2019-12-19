@@ -6,9 +6,6 @@
 \usage{
 shinyRgenesconverged()
 }
-\value{
-
-}
 \description{
 Launch rshiny app.
 }
