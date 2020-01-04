@@ -1,5 +1,6 @@
 
  library(shiny)
+ library(rgenesconverged)
  ui <- fluidPage(
 
    # Application title
@@ -90,8 +91,8 @@ server <- function(input, output, session) {
       if (s != spe && cond){
         convSpe = c(convSpe, s)
       }
-      if (input$pcheck){
-        p = probOfSiteConfig(tree, primates, s, spe, pos)
+      if (s != spe && input$pcheck){
+        p = probOfSiteConfig(treeNJ, phydat, s, spe, pos)
         print(sprintf("Species %s is potentially convergent with p %e.", s, p))
       }
 
