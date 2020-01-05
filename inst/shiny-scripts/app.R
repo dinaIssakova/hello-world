@@ -21,7 +21,7 @@
     sliderInput("th", h3("Convergence Score Threshold"),
                      min = 0, max = 20, value = 5),
     radioButtons("type", "Convergence Options", choices = c("Absolute", "Score")),
-    checkboxInput("pcheck", "Calculate p if convergent (Warning: very long runtime)", FALSE),
+    checkboxInput("pcheck", "Calculate p if convergent (beta)", FALSE),
 
     actionButton("submit", "Submit"),
       ),
@@ -83,10 +83,15 @@ server <- function(input, output, session) {
     convSpe <- c(spe)
     for (s in species){
       # Increment progress bar for every species evaluated for convergence.
+      print(s)
       incProgress(1/length(species), detail = paste("Evaluating species", s))
 
       # Verify if that species is convergent
       cond = areCondSatisfied(treeNJ, phydat, s, spe, pos, type, threshold=threshold, BLOSUM62)
+      if (!rapportools::is.boolean(cond)){
+        cond = FALSE
+      }
+
 
       if (s != spe && cond){
         convSpe = c(convSpe, s)

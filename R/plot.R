@@ -29,16 +29,14 @@ rgenesconvergedPlot <- function(tree, phydat, spe, pos, th, type=c("abs", "score
   convNodes <- getConvergent(tree, phydat, spe, pos, th, type=type)
   convNodes <- c(convNodes, spe)
   groupInfo <- split(tree$tip.label, tree$tip.label%in%convNodes)
-  tree <- ggtree::groupOTU(tree, groupInfo)
+  ptree <- ggtree::groupOTU(tree, groupInfo)
 
   # Guangchuang Yu, David Smith, Huachen Zhu, Yi Guan, Tommy Tsan-Yuk Lam.
   # ggtree: an R package for visualization and annotation of phylogenetic trees with their covariates
   # and other associated data. Methods in Ecology and Evolution 2017, 8(1):28-36, doi:10.1111/2041-210X.12628
-  ggtree::ggtree(tree, branch.length = tree$edge.length, aes(color=group)) +
+  plottree <- ggtree::ggtree(ptree, branch.length = tree$edge.length, aes(color=group)) +
    geom_text2(aes(subset=!isTip, label=node), hjust=-.3) +
    geom_tiplab()
 
-
-
-  return(invisible(NULL))
+  plottree
 }
