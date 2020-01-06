@@ -1,4 +1,4 @@
-citHeader("To cite rgenesconverged in publications use:")
+citHeader("To cite rgenesconverged in publications please use:")
 
 citEntry(
   entry    = "Unpublished",
@@ -7,6 +7,6 @@ citEntry(
   journal  = NA,
   year     = 2019,
   textVersion = paste(
-    "Issakova, D. 2019. rgenesconverged: An R Package for the Exploration of Molecular     Convergent Evolution. bioRxiv doi: https://doi.org/10.1101/858076"
+
   )
 )
