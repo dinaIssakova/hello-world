@@ -6,10 +6,6 @@ citEntry(
   author   = Dina_Issakova,
   journal  = NA,
   year     = 2019,
-  volume   = ,
-  number   = ,
-  pages    = ,
-  url      = ,
   textVersion = paste(
     "Issakova, D. 2019. rgenesconverged: An R Package for the Exploration of Molecular     Convergent Evolution. bioRxiv doi: https://doi.org/10.1101/858076"
   )
